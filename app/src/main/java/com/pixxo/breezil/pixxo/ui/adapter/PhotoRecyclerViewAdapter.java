@@ -15,6 +15,7 @@ package com.pixxo.breezil.pixxo.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,6 +128,7 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
 
   class ImageHolder extends RecyclerView.ViewHolder {
     PhotoViewItemBinding binding;
+    private boolean clicked = false;
 
     ImageHolder(PhotoViewItemBinding binding) {
       super(binding.getRoot());
@@ -137,7 +139,18 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
         Photo photo,
         PhotoClickListener photoClickListener,
         PhotoLongClickListener photoLongClickListener) {
-      itemView.setOnClickListener(v -> photoClickListener.showFullPhoto(photo));
+
+      itemView.setOnClickListener(v -> {
+        if(!clicked) {
+          clicked = true;
+          photoClickListener.showFullPhoto(photo);
+          Handler clickHandler = new Handler();
+          clickHandler.postDelayed(() -> {
+            clicked = false;
+          }, 1000);
+        }
+
+      });
       itemView.setOnLongClickListener(
           v -> {
             photoLongClickListener.doSomethingWithPhoto(photo);

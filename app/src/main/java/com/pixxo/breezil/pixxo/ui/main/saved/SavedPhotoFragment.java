@@ -71,6 +71,7 @@ public class SavedPhotoFragment extends DaggerFragment {
                   R.anim.fragment_pop_slide_in,
                   R.anim.fragment_pop_slide_out)
               .replace(R.id.parent_container, fragment)
+                  .hide(this)
               .addToBackStack("")
               .commit();
         };
