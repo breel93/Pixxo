@@ -84,6 +84,7 @@ public class MainFragment extends DaggerFragment {
                   R.anim.fragment_pop_slide_in,
                   R.anim.fragment_pop_slide_out)
               .add(R.id.parent_container, fragment)
+                  .hide(this)
               .addToBackStack("fragment")
               .commit();
         };
@@ -172,6 +173,7 @@ public class MainFragment extends DaggerFragment {
                   R.anim.fragment_pop_slide_out)
               .add(R.id.parent_container, fragment)
               .addToBackStack("single_list")
+                  .hide(this)
               .commit();
         };
     QuickSelectRecyclerListAdapter quickSelectRecyclerListAdapter =
