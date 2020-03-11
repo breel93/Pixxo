@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply from: '../dependencies.gradle'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion versions.compileSdk
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:' + versions.androidxCore
+    implementation 'ja.burhanrashid52:photoeditor:' + versions.photoeditor
+
+    implementation 'androidx.constraintlayout:constraintlayout:' + versions.constraintlayout
+    implementation 'com.google.android.material:material:' + versions.androidxMaterial
+    implementation 'androidx.cardview:cardview:' + versions.cardview
+    implementation 'com.github.bumptech.glide:glide:' + versions.glide
+    implementation 'androidx.legacy:legacy-support-v4:' + versions.legacy
+    annotationProcessor 'com.github.bumptech.glide:compiler:' + versions.glide
+
+    implementation "android.arch.lifecycle:extensions:1.1.0"
+    implementation "android.arch.lifecycle:viewmodel:1.1.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+
+
+    testImplementation 'junit:junit:' + versions.junit
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+apply from: '../spotless.gradle'

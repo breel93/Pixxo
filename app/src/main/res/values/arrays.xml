@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <array name="empty_array">
+
+    </array>
+
+
+    <array name="search_list">
+        <item>@string/animals</item>
+        <item>@string/science</item>
+        <item>@string/education</item>
+        <item>@string/fashion</item>
+        <item>@string/nature</item>
+        <item>@string/people</item>
+        <item>@string/feelings</item>
+        <item>@string/religion</item>
+        <item>@string/health</item>
+        <item>@string/places</item>
+        <item>@string/industry</item>
+        <item>@string/food</item>
+        <item>@string/computer</item>
+        <item>@string/sports</item>
+        <item>@string/transportation</item>
+        <item>@string/travel</item>
+        <item>@string/buildings</item>
+        <item>@string/business</item>
+        <item>@string/music</item>
+    </array>
+
+    <array name="color_list">
+        <item>@string/color_one</item>
+        <item>@string/color_two</item>
+        <item>@string/color_three</item>
+        <item>@string/color_four</item>
+        <item>@string/color_five</item>
+        <item>@string/color_six</item>
+        <item>@string/color_seven</item>
+        <item>@string/color_eight</item>
+        <item>@string/color_nine</item>
+        <item>@string/color_ten</item>
+        <item>@string/color_eleven</item>
+        <item>@string/color_twelve</item>
+        <item>@string/color_thirteen</item>
+        <item>@string/color_fourteen</item>
+        <item>@string/color_fifteen</item>
+        <item>@string/color_sixteen</item>
+        <item>@string/color_seventeen</item>
+        <item>@string/color_eighteen</item>
+        <item>@string/color_nineteen</item>
+    </array>
+
+    <array name="pref_search_list_value">
+        <item>@string/pref_animals_value</item>
+        <item>@string/pref_science_value</item>
+        <item>@string/pref_education_value</item>
+        <item>@string/pref_fashion_value</item>
+        <item>@string/pref_nature_value</item>
+        <item>@string/pref_people_value</item>
+        <item>@string/pref_feelings_value</item>
+        <item>@string/pref_religion_value</item>
+        <item>@string/pref_health_value</item>
+        <item>@string/pref_places_value</item>
+        <item>@string/pref_animals_value</item>
+        <item>@string/pref_industry_value</item>
+        <item>@string/pref_food_value</item>
+        <item>@string/pref_computer_value</item>
+        <item>@string/pref_sports_value</item>
+        <item>@string/pref_transportation_value</item>
+        <item>@string/pref_travel_value</item>
+        <item>@string/pref_buildings_value</item>
+        <item>@string/pref_business_value</item>
+        <item>@string/pref_music_value</item>
+    </array>
+
+    <array name="pref_search_list">
+        <item>@string/pref_animals</item>
+        <item>@string/pref_science</item>
+        <item>@string/pref_education</item>
+        <item>@string/pref_fashion</item>
+        <item>@string/pref_nature</item>
+        <item>@string/pref_people</item>
+        <item>@string/pref_feelings</item>
+        <item>@string/pref_religion</item>
+        <item>@string/pref_health</item>
+        <item>@string/pref_places</item>
+        <item>@string/pref_animals</item>
+        <item>@string/pref_industry</item>
+        <item>@string/pref_food</item>
+        <item>@string/pref_computer</item>
+        <item>@string/pref_sports</item>
+        <item>@string/pref_transportation</item>
+        <item>@string/pref_travel</item>
+        <item>@string/pref_buildings</item>
+        <item>@string/pref_business</item>
+        <item>@string/pref_music</item>
+    </array>
+
+
+    <array name="order_by_list">
+        <item>@string/pref_latest</item>
+        <item>@string/pref_popular</item>
+    </array>
+
+    <array name="order_by_list_value">
+        <item>@string/pref_latest_value</item>
+        <item>@string/pref_popular_value</item>
+    </array>
+
+
+
+
+
+
+
+
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="two">2</dimen>
+    <dimen name="three">3</dimen>
+    <dimen name="four">4</dimen>
+    <dimen name="five">5</dimen>
+    <dimen name="six">6</dimen>
+    <dimen name="ninety">90</dimen>
+
+    <!--dp-->
+
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="padding_extra_small">4dp</dimen>
+    <dimen name="user_name_text_size">14sp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
+
+    <dimen name="minusOneDP">-1dp</dimen>
+    <dimen name="zeroDP">0dp</dimen>
+    <dimen name="oneDP">1dp</dimen>
+    <dimen name="twoDP">2dp</dimen>
+    <dimen name="threeDP">3dp</dimen>
+    <dimen name="fourDP">4dp</dimen>
+    <dimen name="fiveDP">5dp</dimen>
+    <dimen name="sixDP">6dp</dimen>
+    <dimen name="sevenDP">7dp</dimen>
+    <dimen name="eightDP">8dp</dimen>
+    <dimen name="nineDP">9dp</dimen>
+    <dimen name="tenDP">10dp</dimen>
+    <dimen name="elevenDP">11dp</dimen>
+    <dimen name="twelveDP">12dp</dimen>
+    <dimen name="thirteenDP">13dp</dimen>
+    <dimen name="fourteenDP">14dp</dimen>
+    <dimen name="fifteenDP">15dp</dimen>
+    <dimen name="sixteenDP">16dp</dimen>
+    <dimen name="twentyDP">20dp</dimen>
+    <dimen name="twentyfiveDP">25dp</dimen>
+    <dimen name="thirtyDP">30dp</dimen>
+    <dimen name="thirtyFiveDP">35dp</dimen>
+
+    <dimen name="fiftyDP">50dp</dimen>
+    <dimen name="sixtyDP">60dp</dimen>
+    <dimen name="fiftySixDP">56dp</dimen>
+    <dimen name="OneFiftyDP">150dp</dimen>
+    <dimen name="twoFiftyDP">250dp</dimen>
+    <dimen name="twoEightyDP">280dp</dimen>
+    <dimen name="threeHundredDP">300dp</dimen>
+    <dimen name="threeHundredFiftyDP">350dp</dimen>
+    <dimen name="fiveHundredDP">500dp</dimen>
+    <dimen name="twoHundredDp">200dp</dimen>
+
+
+    <!--sp-->
+
+    <dimen name="eightSP">8sp</dimen>
+    <dimen name="tenSP">10sp</dimen>
+    <dimen name="twelveSP">12sp</dimen>
+    <dimen name="fourteenSP">14sp</dimen>
+    <dimen name="sixteenSP">16sp</dimen>
+    <dimen name="eighteenSP">18sp</dimen>
+    <dimen name="twentyySP">20sp</dimen>
+    <dimen name="twentyTwoSP">22sp</dimen>
+    <dimen name="twentyFourSP">24sp</dimen>
+    <dimen name="thirtyTwoSP">32sp</dimen>
+
+</resources>

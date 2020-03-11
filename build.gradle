@@ -1,0 +1,33 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: './dependencies.gradle'
+apply from: './versionsPlugin.gradle'
+buildscript {
+    apply from: './dependencies.gradle'
+    repositories {
+        maven { url "https://maven.google.com" }
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:' + versions.gradlePlugin
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:' + versions.spotlessPlugin
+        classpath 'com.github.ben-manes:gradle-versions-plugin:' + versions.versionPlugin
+        classpath 'com.google.gms:google-services:' + versions.google_services
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

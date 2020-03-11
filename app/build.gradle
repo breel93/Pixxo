@@ -1,0 +1,182 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply from: '../dependencies.gradle'
+
+
+android {
+
+    signingConfigs {
+        release {
+            keyAlias 'pixxo'
+            keyPassword '93polar@polar92'
+            storeFile file("..//pixxo_keystores.jks")
+            storePassword '93polar@polar92'
+        }
+    }
+
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        applicationId "com.pixxo.breezil.pixxo"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.appVersionCode
+        versionName versions.appVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_KEY", API_KEY)
+        buildConfigField("String", "BASE_URL", BASE_URL)
+    }
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+        testOptions {
+            unitTests.returnDefaultValues = true
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = true
+
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //Support
+    implementation 'androidx.appcompat:appcompat:' + versions.androidxCore
+    implementation 'androidx.exifinterface:exifinterface:' + versions.androidxCore
+    implementation 'androidx.constraintlayout:constraintlayout:' + versions.constraintlayout
+    implementation 'androidx.recyclerview:recyclerview:' + versions.androidxRecyclerView
+    implementation 'com.google.android.material:material:' + versions.androidxMaterial
+    implementation 'androidx.legacy:legacy-preference-v14:' + versions.legacy
+    implementation 'androidx.legacy:legacy-support-v4:' + versions.legacy
+    implementation 'androidx.cardview:cardview:' + versions.cardview
+
+    //Arch component
+    implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
+
+    //Room
+    annotationProcessor 'androidx.room:room-compiler:' + versions.room
+    // optional - RxJava support for Room
+    implementation 'androidx.room:room-rxjava2:' + versions.room
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:' + versions.retrofit
+    implementation 'com.squareup.retrofit2:converter-gson:' + versions.retrofit
+    implementation 'com.google.code.gson:gson:' + versions.gson
+
+    //Paging Library
+    implementation 'androidx.paging:paging-runtime:' + versions.paging
+
+    //navigation
+    implementation 'androidx.navigation:navigation-fragment:' + versions.navigation
+    implementation 'androidx.navigation:navigation-ui:' + versions.navigation
+
+
+    //Dagger
+    implementation 'com.google.dagger:dagger:' + versions.dagger
+    implementation 'com.google.dagger:dagger-android:' + versions.dagger
+    implementation 'com.google.dagger:dagger-android-support:' + versions.dagger
+    annotationProcessor 'com.google.dagger:dagger-android-processor:' + versions.dagger
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + versions.dagger
+
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:' + versions.glide
+    annotationProcessor 'com.github.bumptech.glide:compiler:' + versions.glide
+
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:' + versions.okhttp
+    implementation 'com.squareup.okhttp3:okhttp:' + versions.okhttp
+
+    implementation 'com.jakewharton.timber:timber:' + versions.timber
+
+    implementation 'io.reactivex.rxjava2:rxjava:' + versions.rxjava
+    implementation 'io.reactivex.rxjava2:rxandroid:' + versions.rxandroid
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:' + versions.rxjava_adapter
+
+
+    //facebook shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    implementation 'com.theartofdev.edmodo:android-image-cropper:' + versions.image_cropper
+
+    implementation 'com.an.customfontview:customfont:' + versions.customfont
+
+    //PhotoEditor
+    implementation 'ja.burhanrashid52:photoeditor:' + versions.photoeditor
+
+    //photo editor library
+    implementation project(':photoeditor')
+
+    // Reactive Streams (convert Observable to LiveData)
+    implementation 'android.arch.lifecycle:reactivestreams:' + versions.reactivestreams
+
+    //About
+    implementation 'com.github.medyo:android-about-page:' + versions.aboutPage
+    implementation('com.mikepenz:aboutlibraries:' + versions.aboutLibraries) {
+        transitive = true
+    }
+
+//     Architecture components testing
+    androidTestImplementation 'androidx.arch.core:core-testing:' + versions.arch_core_testing
+    testImplementation 'androidx.arch.core:core-testing:' + versions.arch_core_testing
+
+    // -------- LOCAL UNIT TESTS (use JUnit5)
+    // JUnit Jupiter
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:' + versions.junit_jupiter_version
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:' + versions.junit_jupiter_version
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:' + versions.junit_jupiter_version
+
+
+    // -------- MOCKITO
+    testImplementation 'org.mockito:mockito-core:' + versions.mockitoVersion
+    androidTestImplementation 'org.mockito:mockito-android:' + versions.mockitoVersion
+
+
+    implementation 'androidx.test.espresso:espresso-idling-resource:' + versions.espresso
+    testImplementation 'junit:junit:4.13'
+
+//    androidTestImplementation 'com.android.support.test:core:1.0.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + versions.espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:' + versions.espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:' + versions.espresso
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
+    testImplementation 'androidx.test:rules:1.2.0'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+
+
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.3.1'
+    testImplementation 'org.robolectric:robolectric:' + versions.robolectric
+    testImplementation 'org.powermock:powermock-core:' + versions.powerMock
+    testImplementation 'org.powermock:powermock-module-junit4:' + versions.powerMockModuleJunit4
+    testImplementation 'org.powermock:powermock-module-junit4-rule:' + versions.powerMockModuleJunit4Rule
+    testImplementation 'org.powermock:powermock-api-mockito2:' + versions.powerMockApiMockito
+
+}
+
+apply from: '../spotless.gradle'

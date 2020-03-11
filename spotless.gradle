@@ -1,0 +1,14 @@
+apply plugin: "com.diffplug.gradle.spotless"
+spotless {
+    java {
+        target "**/*.java"
+        licenseHeaderFile '../spotless.license.java'
+        trimTrailingWhitespace()
+        removeUnusedImports()
+        googleJavaFormat()
+        endWithNewline()
+    }
+    groovyGradle{
+        target('*.gradle', 'gradle/*.gradle')
+    }
+}

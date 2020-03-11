@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/twoDP"
+        app:cardElevation="@dimen/threeDP"
+        android:layout_margin="@dimen/oneDP"
+       >
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:scaleType="fitXY"
+            android:layout_height="@dimen/OneFiftyDP"
+            android:src="@drawable/placeholder"
+            android:transitionName="imageTransition"
+            />
+
+    </androidx.cardview.widget.CardView>
+</layout>

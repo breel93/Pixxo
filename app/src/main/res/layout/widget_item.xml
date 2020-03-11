@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_item_textview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:text="Images"
+    android:layout_marginStart="@dimen/eightDP"
+    android:layout_marginEnd="@dimen/eightDP"
+    android:layout_marginTop="@dimen/eightDP"
+    android:layout_marginBottom="@dimen/eightDP"/>
