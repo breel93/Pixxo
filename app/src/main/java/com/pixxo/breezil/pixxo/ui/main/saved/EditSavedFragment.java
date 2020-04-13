@@ -40,6 +40,7 @@ import dagger.android.support.DaggerFragment;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -97,6 +98,7 @@ public class EditSavedFragment extends DaggerFragment implements AdapterView.OnI
     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
         == PackageManager.PERMISSION_GRANTED) {
 
+//      List<String> list = new ArrayList<>(Arrays.asList(str));
       // List all the items within the folder..
       File[] files = new File(directoryPath).listFiles(new ImageFileFilter());
 

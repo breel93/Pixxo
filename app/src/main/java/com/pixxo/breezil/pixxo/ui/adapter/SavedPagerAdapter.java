@@ -38,6 +38,7 @@ public class SavedPagerAdapter extends FragmentStatePagerAdapter {
     this.context = context;
   }
 
+  @NonNull
   @Override
   public Fragment getItem(int position) {
     if (position == saved_Position) {
@@ -69,14 +70,14 @@ public class SavedPagerAdapter extends FragmentStatePagerAdapter {
 
   @NonNull
   @Override
-  public Object instantiateItem(ViewGroup container, int position) {
+  public Object instantiateItem(@NonNull ViewGroup container, int position) {
     Fragment fragment = (Fragment) super.instantiateItem(container, position);
     fragmentList.put(position, fragment);
     return fragment;
   }
 
   @Override
-  public void destroyItem(ViewGroup container, int position, Object object) {
+  public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
     fragmentList.remove(position);
     super.destroyItem(container, position, object);
   }

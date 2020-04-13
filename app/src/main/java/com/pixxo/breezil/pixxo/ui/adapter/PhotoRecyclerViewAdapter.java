@@ -145,9 +145,7 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
           clicked = true;
           photoClickListener.showFullPhoto(photo);
           Handler clickHandler = new Handler();
-          clickHandler.postDelayed(() -> {
-            clicked = false;
-          }, 1000);
+          clickHandler.postDelayed(() -> clicked = false, 1000);
         }
 
       });

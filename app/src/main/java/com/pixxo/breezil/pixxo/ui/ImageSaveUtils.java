@@ -13,6 +13,7 @@
  */
 package com.pixxo.breezil.pixxo.ui;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import com.pixxo.breezil.pixxo.R;
 import java.io.File;
@@ -28,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 public class ImageSaveUtils {
   Context context;
@@ -36,16 +40,16 @@ public class ImageSaveUtils {
     this.context = context;
   }
 
-  public void startDownloading(Context context, Bitmap bitmap) {
+  public void startDownloading(Context context, Bitmap bitmap, String directory) {
     File storageDir =
         new File(
-            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                + context.getString(R.string._slash_pixxo));
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + directory);
     if (Build.VERSION.SDK_INT >= 29) {
       ContentValues values = this.contentValues();
       values.put(
           MediaStore.Images.Media.RELATIVE_PATH,
-          "Pictures/" + context.getString(R.string._slash_pixxo));
+          "Pictures/" + directory);
       values.put(MediaStore.Images.Media.IS_PENDING, true);
       Uri uri =
           context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
@@ -109,11 +113,38 @@ public class ImageSaveUtils {
     return values;
   }
 
+
+  public void saveImage(Context context, Bitmap bitmap, @NonNull String name) {
+    OutputStream fos = null;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      ContentResolver resolver = context.getContentResolver();
+      ContentValues contentValues = new ContentValues();
+      contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name + ".pnd");
+      contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+      contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+      Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+      try {
+        fos = resolver.openOutputStream(Objects.requireNonNull(imageUri));
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+    } else {
+      String imagesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+      File image = new File(imagesDir, name + ".png");
+      try {
+        fos = new FileOutputStream(image);
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+    }
+    saveImageToStream(bitmap,fos);
+  }
+
   private void saveImageToStream(Bitmap bitmap, OutputStream outputStream) {
     if (outputStream != null) {
       try {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        outputStream.close();
+        Objects.requireNonNull(outputStream).close();
       } catch (Exception e) {
         e.printStackTrace();
       }

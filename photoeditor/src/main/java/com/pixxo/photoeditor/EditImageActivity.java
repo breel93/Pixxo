@@ -15,12 +15,14 @@ package com.pixxo.photoeditor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -346,31 +348,30 @@ public class EditImageActivity extends BaseActivity
     if (requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
       showLoading(getString(R.string.saving_));
 
-      // Create the new file in the external storage
-      String timeStamp =
-          new SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
-              .format(new Date());
-      String imageFileName = getString(R.string.pixxo) + timeStamp + getString(R.string.dot_png);
+      String imageFileName = getString(R.string.pixxo) + System.currentTimeMillis() + getString(R.string.dot_png);
       File storageDir =
-          new File(
-              Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                  + getString(R.string.slash_pixxo_edited));
+          new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+              + getString(R.string.slash_pixxo_edited));
       boolean success = true;
       if (!storageDir.exists()) {
         success = storageDir.mkdirs();
       }
-      if (success) {
-
+      if(success) {
         File imageFile = new File(storageDir, imageFileName);
         savedImagePath = imageFile.getAbsolutePath();
         try {
-
+          imageFile.createNewFile();
           SaveSettings saveSettings =
               new SaveSettings.Builder()
                   .setClearViewsEnabled(true)
                   .setTransparencyEnabled(true)
                   .build();
 
+          ContentValues contentValues = new ContentValues();
+          contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+          }
           mPhotoEditor.saveAsFile(
               imageFile.getAbsolutePath(),
               saveSettings,
@@ -390,13 +391,17 @@ public class EditImageActivity extends BaseActivity
                   showSnackbar("Failed to save Image");
                 }
               });
-        } catch (Exception e) {
+
+
+        } catch (IOException e) {
           e.printStackTrace();
           hideLoading();
           showSnackbar(e.getMessage());
         }
       }
+
     }
+
   }
 
   private static void galleryAddPic(Context context, String imagePath) {

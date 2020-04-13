@@ -49,4 +49,5 @@ public class EditedModel {
   public void setImage(Bitmap image) {
     this.image = image;
   }
+
 }
