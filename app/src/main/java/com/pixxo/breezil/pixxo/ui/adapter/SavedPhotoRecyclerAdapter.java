@@ -54,10 +54,11 @@ public class SavedPhotoRecyclerAdapter
           return oldItem.getRoomId() == newItem.getRoomId();
         }
 
+
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull Photo oldItem, @NonNull Photo newItem) {
-          return newItem == oldItem;
+          return oldItem == newItem;
         }
       };
 
@@ -99,7 +100,7 @@ public class SavedPhotoRecyclerAdapter
       circularProgressDrawable.start();
       double width = photo.getWebformatWidth();
       double height = photo.getWebformatHeight() / .75;
-      binding.photoItem.setAspectRatio((height / width));
+      binding.photoItem.setAspectRatio(height / width);
       Glide.with(context)
           .load(photo.getWebformatURL())
           .apply(

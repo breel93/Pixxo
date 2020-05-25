@@ -17,6 +17,9 @@ import static com.pixxo.breezil.pixxo.BuildConfig.BASE_URL;
 
 import android.app.Application;
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.api.OkHttp;
 import com.pixxo.breezil.pixxo.api.PhotoApi;
@@ -48,9 +51,14 @@ public class AppModule {
   @Singleton
   @Provides
   public AppDatabase provideDatabase(Application app) {
+     final Migration MIGRATION_1_2 = new Migration(1, 2) {
+      @Override
+      public void migrate(SupportSQLiteDatabase database) {
+        database.beginTransaction();
+      }
+    };
     return Room.databaseBuilder(
             app.getApplicationContext(), AppDatabase.class, app.getString(R.string.pixxo_db))
-        //        .fallbackToDestructiveMigration()
         .build();
   }
 

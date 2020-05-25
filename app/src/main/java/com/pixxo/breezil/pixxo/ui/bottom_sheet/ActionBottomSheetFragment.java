@@ -27,7 +27,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +42,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentActionBottomSheetBinding;
@@ -53,9 +50,6 @@ import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.ui.ImageSaveUtils;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotosViewModel;
 import com.pixxo.photoeditor.EditImageActivity;
-
-import java.io.IOException;
-
 import dagger.android.support.AndroidSupportInjection;
 import javax.inject.Inject;
 
@@ -105,7 +99,6 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
     this.mContext = context;
     AndroidSupportInjection.inject(this);
   }
-
 
   private void updateUi(Photo photo) {
 
@@ -161,16 +154,18 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
                         Object model,
                         Target<Bitmap> target,
                         boolean isFirstResource) {
-                      getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                          Toast.makeText(
-                              getContext(),
-                              R.string.cant_download_until_images_is_loaded,
-                              Toast.LENGTH_SHORT)
-                              .show();
-                        }
-                      });
+                      getActivity()
+                          .runOnUiThread(
+                              new Runnable() {
+                                @Override
+                                public void run() {
+                                  Toast.makeText(
+                                          getContext(),
+                                          R.string.cant_download_until_images_is_loaded,
+                                          Toast.LENGTH_SHORT)
+                                      .show();
+                                }
+                              });
                       dismiss();
                       return true;
                     }
@@ -186,26 +181,29 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
                               ActionBottomSheetFragment.this.mContext,
                               Manifest.permission.READ_EXTERNAL_STORAGE)
                           == PackageManager.PERMISSION_GRANTED) {
-                          getActivity().runOnUiThread(() -> {
-                            mProgress.setTitle(mContext.getString(R.string.downloading));
-                            mProgress.setMessage(
-                                mContext.getString(R.string.please_wait_image_is_downloading));
-                            mProgress.setCancelable(false);
-                            mProgress.show();
-                            Handler handler = new Handler();
-                            handler.postDelayed(
+                        getActivity()
+                            .runOnUiThread(
                                 () -> {
-                                  imageSaveUtils.startDownloading(mContext, bitmap,getString(R.string._slash_pixxo));
-                                  mProgress.dismiss();
-                                  Toast.makeText(
-                                      ActionBottomSheetFragment.this.mContext,
-                                      R.string.downloaded,
-                                      Toast.LENGTH_SHORT)
-                                      .show();
-                                },
-                                1000);
-                          });
-
+                                  mProgress.setTitle(mContext.getString(R.string.downloading));
+                                  mProgress.setMessage(
+                                      mContext.getString(
+                                          R.string.please_wait_image_is_downloading));
+                                  mProgress.setCancelable(false);
+                                  mProgress.show();
+                                  Handler handler = new Handler();
+                                  handler.postDelayed(
+                                      () -> {
+                                        imageSaveUtils.startDownloading(
+                                            mContext, bitmap, getString(R.string._slash_pixxo));
+                                        mProgress.dismiss();
+                                        Toast.makeText(
+                                                ActionBottomSheetFragment.this.mContext,
+                                                R.string.downloaded,
+                                                Toast.LENGTH_SHORT)
+                                            .show();
+                                      },
+                                      1000);
+                                });
 
                       } else {
                         ActivityCompat.requestPermissions(

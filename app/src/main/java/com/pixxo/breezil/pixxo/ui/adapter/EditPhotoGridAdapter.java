@@ -35,7 +35,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import com.pixxo.breezil.pixxo.R;
-import com.pixxo.breezil.pixxo.model.EditedModel;
+import com.pixxo.breezil.pixxo.model.EditedPhoto;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotoDialogFragment;
 import com.pixxo.photoeditor.EditImageActivity;
 import java.io.ByteArrayOutputStream;
@@ -43,15 +43,15 @@ import java.util.List;
 
 public class EditPhotoGridAdapter extends BaseAdapter {
 
-  private List<EditedModel> editedModels;
+  private List<EditedPhoto> editedPhotos;
   private LayoutInflater inflater;
 
   private Context context;
   private FragmentManager fragmentManager;
 
   public EditPhotoGridAdapter(
-      Context context, List<EditedModel> editedModels, FragmentManager fragmentManager) {
-    this.editedModels = editedModels;
+      Context context, List<EditedPhoto> editedPhotos, FragmentManager fragmentManager) {
+    this.editedPhotos = editedPhotos;
     this.fragmentManager = fragmentManager;
     this.context = context;
     inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -59,12 +59,12 @@ public class EditPhotoGridAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return editedModels.size();
+    return editedPhotos.size();
   }
 
   @Override
   public Object getItem(int position) {
-    return editedModels.get(position);
+    return editedPhotos.get(position);
   }
 
   @Override
@@ -83,7 +83,7 @@ public class EditPhotoGridAdapter extends BaseAdapter {
       }
 
       ImageView imageView = convertView.findViewById(R.id.image);
-      Bitmap image = editedModels.get(position).getImage();
+      Bitmap image = editedPhotos.get(position).getImage();
       if (image != null) {
         imageView.setImageBitmap(image);
       } else {

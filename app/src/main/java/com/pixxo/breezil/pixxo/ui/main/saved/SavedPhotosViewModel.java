@@ -15,7 +15,6 @@ package com.pixxo.breezil.pixxo.ui.main.saved;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.repository.SavedRepository;
@@ -32,28 +31,10 @@ public class SavedPhotosViewModel extends ViewModel {
     this.savedRepository = savedRepository;
   }
 
-  public LiveData<List<Photo>> getSavedList() {
-    return photos;
-  }
-
   public LiveData<List<Photo>> getSavedPhoto() {
     return savedRepository.getSavedPhotos();
   }
 
-  public void getPhotos() {
-    final LiveData<List<Photo>> source = savedRepository.getSavedPhotos();
-    photos.addSource(
-        source,
-        new Observer<List<Photo>>() {
-          @Override
-          public void onChanged(List<Photo> photos_list) {
-            if (photos != null) {
-              photos.setValue(photos_list);
-            }
-            photos.removeSource(source);
-          }
-        });
-  }
 
   public LiveData<String> insertPhoto(Photo photo) {
     return savedRepository.insertPhoto(photo);

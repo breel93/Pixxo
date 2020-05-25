@@ -33,7 +33,7 @@ import com.pixxo.breezil.pixxo.databinding.FragmentSavedPhotoDialogBinding;
 /** A simple {@link Fragment} subclass. */
 public class SavedPhotoDialogFragment extends AppCompatDialogFragment {
 
-  FragmentSavedPhotoDialogBinding binding;
+  private FragmentSavedPhotoDialogBinding binding;
 
   public static SavedPhotoDialogFragment getImageString(String imageString, String type) {
     SavedPhotoDialogFragment fragment = new SavedPhotoDialogFragment();

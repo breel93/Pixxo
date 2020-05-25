@@ -13,31 +13,25 @@
  */
 package com.pixxo.breezil.pixxo.repository.paging;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
-import androidx.paging.PageKeyedDataSource;
-
-import com.pixxo.breezil.pixxo.api.EndpointRepository;
-import com.pixxo.breezil.pixxo.model.Photo;
-import com.pixxo.breezil.pixxo.model.PhotosResult;
-import com.pixxo.breezil.pixxo.repository.NetworkState;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
-
 import static com.pixxo.breezil.pixxo.utils.Constant.ONE;
 import static com.pixxo.breezil.pixxo.utils.Constant.TEN;
 import static com.pixxo.breezil.pixxo.utils.Constant.TWO;
 import static com.pixxo.breezil.pixxo.utils.Constant.ZERO;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.paging.PageKeyedDataSource;
+import com.pixxo.breezil.pixxo.api.EndpointRepository;
+import com.pixxo.breezil.pixxo.model.Photo;
+import com.pixxo.breezil.pixxo.model.PhotosResult;
+import com.pixxo.breezil.pixxo.repository.NetworkState;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import timber.log.Timber;
 
 @Singleton
 public class PhotoDataSource extends PageKeyedDataSource<Integer, Photo>
@@ -173,7 +167,7 @@ public class PhotoDataSource extends PageKeyedDataSource<Integer, Photo>
       LoadCallback<Integer, Photo> callback,
       LoadParams<Integer> params,
       List<Photo> photos) {
-    if ( photosResult.getHits().size() > ZERO) {
+    if (photosResult.getHits().size() > ZERO) {
 
       photos.addAll(photosResult.getHits());
       Integer key = (params.key > ONE) ? params.key + ONE : null;

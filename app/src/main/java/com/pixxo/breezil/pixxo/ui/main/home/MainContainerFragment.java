@@ -1,5 +1,17 @@
+/**
+ * Designed and developed by Kola Emiola
+ *
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
+ *
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.pixxo.breezil.pixxo.ui.main.home;
-
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +21,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentMainContainerBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.PagerAdapter;
@@ -21,16 +31,12 @@ import com.pixxo.breezil.pixxo.ui.bottom_sheet.ChoosePhotoBottomDialogFragment;
 import com.pixxo.breezil.pixxo.ui.main.saved.SaveAndEditFragment;
 import com.pixxo.breezil.pixxo.ui.settings.SettingsActivity;
 import com.pixxo.breezil.pixxo.utils.BottomNavigationHelper;
-
-import java.util.Objects;
-
 import dagger.android.support.DaggerFragment;
+import java.util.Objects;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+/** A simple {@link Fragment} subclass. */
 public class MainContainerFragment extends DaggerFragment {
 
   private FragmentMainContainerBinding binding;
@@ -43,10 +49,9 @@ public class MainContainerFragment extends DaggerFragment {
     // Required empty public constructor
   }
 
-
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+  public View onCreateView(
+      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_container, container, false);
     pagerAdapter = new PagerAdapter(getChildFragmentManager());
@@ -54,12 +59,12 @@ public class MainContainerFragment extends DaggerFragment {
     setupBottomNavigation();
 
     HttpLoggingInterceptor logging =
-        new HttpLoggingInterceptor(
-            message -> Timber.tag(getString(R.string.okhttp)).d(message));
+        new HttpLoggingInterceptor(message -> Timber.tag(getString(R.string.okhttp)).d(message));
     logging.redactHeader(getString(R.string.authorization));
     logging.redactHeader(getString(R.string.cookie));
     binding.addButton.setOnClickListener(
-        v -> choosePhotoBottomDialogFragment.show(
+        v ->
+            choosePhotoBottomDialogFragment.show(
                 getParentFragmentManager(), getString(R.string.choose_image)));
     return binding.getRoot();
   }

@@ -14,7 +14,6 @@
 package com.pixxo.breezil.pixxo.ui.main.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +32,15 @@ import com.pixxo.breezil.pixxo.ui.bottom_sheet.ActionBottomSheetFragment;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoLongClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.QuickSelectListener;
-import com.pixxo.breezil.pixxo.ui.main.MainActivity;
 import com.pixxo.breezil.pixxo.ui.main.MainViewModel;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
 import com.pixxo.breezil.pixxo.view_model.ViewModelFactory;
 import dagger.android.support.DaggerFragment;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.inject.Inject;
 
 /** A simple {@link Fragment} subclass. */
@@ -84,7 +85,7 @@ public class MainFragment extends DaggerFragment {
                   R.anim.fragment_pop_slide_in,
                   R.anim.fragment_pop_slide_out)
               .add(R.id.parent_container, fragment)
-                  .hide(this)
+              .hide(this)
               .addToBackStack("fragment")
               .commit();
         };
@@ -118,7 +119,7 @@ public class MainFragment extends DaggerFragment {
         .observe(
             getViewLifecycleOwner(),
             photos -> {
-                adapter.submitList(photos);
+              adapter.submitList(photos);
             });
 
     viewModel
@@ -139,7 +140,7 @@ public class MainFragment extends DaggerFragment {
           public boolean onQueryTextSubmit(String query) {
             if (!query.isEmpty()) {
               search(query);
-            }else {
+            } else {
               refresh();
             }
             return true;
@@ -173,7 +174,7 @@ public class MainFragment extends DaggerFragment {
                   R.anim.fragment_pop_slide_out)
               .add(R.id.parent_container, fragment)
               .addToBackStack("single_list")
-                  .hide(this)
+              .hide(this)
               .commit();
         };
     QuickSelectRecyclerListAdapter quickSelectRecyclerListAdapter =
@@ -191,7 +192,7 @@ public class MainFragment extends DaggerFragment {
         .observe(
             this,
             photos -> {
-                adapter.submitList(photos);
+              adapter.submitList(photos);
             });
     viewModel
         .getNetworkState()
@@ -225,8 +226,6 @@ public class MainFragment extends DaggerFragment {
 
   private void gotoOptionSelect() {
     binding.selectOption.setOnClickListener(
-        v -> {
-          Toast.makeText(getContext(), "Select Option", Toast.LENGTH_LONG).show();
-        });
+        v -> Toast.makeText(getContext(), "Select Option", Toast.LENGTH_LONG).show());
   }
 }

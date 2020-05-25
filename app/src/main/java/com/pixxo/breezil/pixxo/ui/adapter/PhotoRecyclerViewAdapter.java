@@ -120,8 +120,7 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
       } else {
         notifyItemInserted(getItemCount());
       }
-    }
-    else if (newExtraRow && previousState != newNetworkState && getItemCount() > 0) {
+    } else if (newExtraRow && previousState != newNetworkState && getItemCount() > 0) {
       notifyItemChanged(getItemCount() - 1);
     }
   }
@@ -140,15 +139,15 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
         PhotoClickListener photoClickListener,
         PhotoLongClickListener photoLongClickListener) {
 
-      itemView.setOnClickListener(v -> {
-        if(!clicked) {
-          clicked = true;
-          photoClickListener.showFullPhoto(photo);
-          Handler clickHandler = new Handler();
-          clickHandler.postDelayed(() -> clicked = false, 1000);
-        }
-
-      });
+      itemView.setOnClickListener(
+          v -> {
+            if (!clicked) {
+              clicked = true;
+              photoClickListener.showFullPhoto(photo);
+              Handler clickHandler = new Handler();
+              clickHandler.postDelayed(() -> clicked = false, 1000);
+            }
+          });
       itemView.setOnLongClickListener(
           v -> {
             photoLongClickListener.doSomethingWithPhoto(photo);

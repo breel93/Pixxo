@@ -6,8 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <GridView
-            android:id="@+id/editGrid"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/editedPhotoRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:columnWidth="@dimen/OneFiftyDP"
@@ -19,9 +19,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.main.saved.EditSavedFragment">
+            tools:context=".ui.main.saved.EditPhotoFragment">
 
-        </GridView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/emptyText"

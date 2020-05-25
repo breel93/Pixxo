@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import com.pixxo.breezil.pixxo.R;
@@ -47,9 +46,7 @@ public class ImageSaveUtils {
                 + directory);
     if (Build.VERSION.SDK_INT >= 29) {
       ContentValues values = this.contentValues();
-      values.put(
-          MediaStore.Images.Media.RELATIVE_PATH,
-          "Pictures/" + directory);
+      values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/" + directory);
       values.put(MediaStore.Images.Media.IS_PENDING, true);
       Uri uri =
           context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
@@ -113,7 +110,6 @@ public class ImageSaveUtils {
     return values;
   }
 
-
   public void saveImage(Context context, Bitmap bitmap, @NonNull String name) {
     OutputStream fos = null;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -137,7 +133,7 @@ public class ImageSaveUtils {
         e.printStackTrace();
       }
     }
-    saveImageToStream(bitmap,fos);
+    saveImageToStream(bitmap, fos);
   }
 
   private void saveImageToStream(Bitmap bitmap, OutputStream outputStream) {

@@ -57,7 +57,6 @@ public class SavedPhotoFragment extends DaggerFragment {
     setUpViewModel();
     return binding.getRoot();
   }
-  //  ParentFragment.this.getChildFragmentManager()
 
   private void setUpAdapter() {
     PhotoClickListener photoClickListener =
@@ -71,7 +70,7 @@ public class SavedPhotoFragment extends DaggerFragment {
                   R.anim.fragment_pop_slide_in,
                   R.anim.fragment_pop_slide_out)
               .replace(R.id.parent_container, fragment)
-                  .hide(this)
+              .hide(this)
               .addToBackStack("")
               .commit();
         };
@@ -86,7 +85,6 @@ public class SavedPhotoFragment extends DaggerFragment {
 
     savedPhotoRecyclerAdapter =
         new SavedPhotoRecyclerAdapter(getContext(), photoLongClickListener, photoClickListener);
-
     binding.savedList.setHasFixedSize(true);
     binding.savedList.setAdapter(savedPhotoRecyclerAdapter);
   }
@@ -96,16 +94,4 @@ public class SavedPhotoFragment extends DaggerFragment {
         .getSavedPhoto()
         .observe(getViewLifecycleOwner(), photos -> savedPhotoRecyclerAdapter.submitList(photos));
   }
-
-  //  @Override
-  //  public void onPause() {
-  //    super.onPause();
-  //
-  //    for ( Fragment f : getChildFragmentManager().getFragments() ) {
-  //      if ( f instanceof SavedPhotoFragment) {
-  //        getChildFragmentManager().beginTransaction().remove( f ).commit();
-  //      }
-  //    }
-  //
-  //  }
 }

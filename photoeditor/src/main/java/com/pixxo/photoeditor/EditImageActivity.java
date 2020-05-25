@@ -62,9 +62,6 @@ import ja.burhanrashid52.photoeditor.TextStyleBuilder;
 import ja.burhanrashid52.photoeditor.ViewType;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class EditImageActivity extends BaseActivity
     implements OnPhotoEditorListener,
@@ -348,15 +345,17 @@ public class EditImageActivity extends BaseActivity
     if (requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
       showLoading(getString(R.string.saving_));
 
-      String imageFileName = getString(R.string.pixxo) + System.currentTimeMillis() + getString(R.string.dot_png);
+      String imageFileName =
+          getString(R.string.pixxo) + System.currentTimeMillis() + getString(R.string.dot_png);
       File storageDir =
-          new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-              + getString(R.string.slash_pixxo_edited));
+          new File(
+              Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                  + getString(R.string.slash_pixxo_edited));
       boolean success = true;
       if (!storageDir.exists()) {
         success = storageDir.mkdirs();
       }
-      if(success) {
+      if (success) {
         File imageFile = new File(storageDir, imageFileName);
         savedImagePath = imageFile.getAbsolutePath();
         try {
@@ -370,7 +369,8 @@ public class EditImageActivity extends BaseActivity
           ContentValues contentValues = new ContentValues();
           contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+            contentValues.put(
+                MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
           }
           mPhotoEditor.saveAsFile(
               imageFile.getAbsolutePath(),
@@ -392,16 +392,13 @@ public class EditImageActivity extends BaseActivity
                 }
               });
 
-
         } catch (IOException e) {
           e.printStackTrace();
           hideLoading();
           showSnackbar(e.getMessage());
         }
       }
-
     }
-
   }
 
   private static void galleryAddPic(Context context, String imagePath) {

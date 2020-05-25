@@ -13,7 +13,7 @@
  */
 package com.pixxo.breezil.pixxo.di.module;
 
-import com.pixxo.breezil.pixxo.ui.main.saved.EditSavedFragment;
+import com.pixxo.breezil.pixxo.ui.main.saved.EditPhotoFragment;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotoFragment;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -24,5 +24,5 @@ public abstract class SavedFragmentModule {
   abstract SavedPhotoFragment contributeSavedPhotoFragment();
 
   @ContributesAndroidInjector
-  abstract EditSavedFragment contributeEditSavedFragment();
+  abstract EditPhotoFragment contributeEditSavedFragment();
 }

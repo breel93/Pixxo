@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.pixxo.breezil.pixxo.R;
-import com.pixxo.breezil.pixxo.ui.main.saved.EditSavedFragment;
+import com.pixxo.breezil.pixxo.ui.main.saved.EditPhotoFragment;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotoFragment;
 
 public class SavedPagerAdapter extends FragmentStatePagerAdapter {
@@ -44,7 +44,7 @@ public class SavedPagerAdapter extends FragmentStatePagerAdapter {
     if (position == saved_Position) {
       return new SavedPhotoFragment();
     } else {
-      return new EditSavedFragment();
+      return new EditPhotoFragment();
     }
   }
 

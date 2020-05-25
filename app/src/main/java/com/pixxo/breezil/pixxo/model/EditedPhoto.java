@@ -15,15 +15,18 @@ package com.pixxo.breezil.pixxo.model;
 
 import android.graphics.Bitmap;
 
-public class EditedModel {
+public class EditedPhoto {
   private String path;
   private boolean isDirectory;
   private Bitmap image;
 
-  public EditedModel(String path, boolean isDirectory, Bitmap image) {
+  public EditedPhoto(String path, boolean isDirectory, Bitmap image) {
     this.path = path;
     this.isDirectory = isDirectory;
     this.image = image;
+  }
+
+  public EditedPhoto() {
   }
 
   public boolean isDirectory() {
@@ -49,5 +52,4 @@ public class EditedModel {
   public void setImage(Bitmap image) {
     this.image = image;
   }
-
 }

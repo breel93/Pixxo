@@ -14,18 +14,13 @@
 package com.pixxo.breezil.pixxo.ui.bottom_sheet;
 
 import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
-import static com.pixxo.breezil.pixxo.utils.Constant.STORAGE_PERMISSION_CODE;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +28,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -118,81 +111,93 @@ public class SavedActionBottomSheetFragment extends BottomSheetDialogFragment {
                     dismiss();
                   });
         });
-//    binding.selectDownload.setOnClickListener(
-//        v -> {
-//          Glide.with(getActivity())
-//              .asBitmap()
-//              .load(photo.getWebformatURL())
-//              .listener(
-//                  new RequestListener<Bitmap>() {
-//                    @Override
-//                    public boolean onLoadFailed(
-//                        @Nullable GlideException e,
-//                        Object model,
-//                        Target<Bitmap> target,
-//                        boolean isFirstResource) {
-//                      return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(
-//                        Bitmap bitmap,
-//                        Object model,
-//                        Target<Bitmap> target,
-//                        DataSource dataSource,
-//                        boolean isFirstResource) {
-//                      if (ContextCompat.checkSelfPermission(
-//                              SavedActionBottomSheetFragment.this.mContext,
-//                              Manifest.permission.READ_EXTERNAL_STORAGE)
-//                          == PackageManager.PERMISSION_GRANTED) {
-//                        mProgress.setTitle(mContext.getString(R.string.downloading));
-//                        mProgress.setMessage(
-//                            mContext.getString(R.string.please_wait_image_is_downloading));
-//                        mProgress.setCancelable(false);
-//                        mProgress.show();
-//                        Handler handler = new Handler();
-//                        handler.postDelayed(
-//                            () -> {
-//                              imageSaveUtils.startDownloading(
-//                                  SavedActionBottomSheetFragment.this.mContext, bitmap,getString(R.string._slash_pixxo));
-//                              mProgress.dismiss();
-//                              Toast.makeText(
-//                                      SavedActionBottomSheetFragment.this.mContext,
-//                                      R.string.downloaded,
-//                                      Toast.LENGTH_SHORT)
-//                                  .show();
-//                            },
-//                            1000);
-//                      } else {
-//                        ActivityCompat.requestPermissions(
-//                            (Activity) SavedActionBottomSheetFragment.this.mContext,
-//                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
-//                            STORAGE_PERMISSION_CODE);
-//                      }
-//                      return true;
-//                    }
-//                  })
-//              .submit();
-//          dismiss();
-//        });
-    binding.selectDownload.setOnClickListener(v -> {
-      Glide.with(getActivity())
-          .asBitmap()
-          .load(photo.getWebformatURL())
-          .listener(new RequestListener<Bitmap>() {
-        @Override
-        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-          return false;
-        }
+    //    binding.selectDownload.setOnClickListener(
+    //        v -> {
+    //          Glide.with(getActivity())
+    //              .asBitmap()
+    //              .load(photo.getWebformatURL())
+    //              .listener(
+    //                  new RequestListener<Bitmap>() {
+    //                    @Override
+    //                    public boolean onLoadFailed(
+    //                        @Nullable GlideException e,
+    //                        Object model,
+    //                        Target<Bitmap> target,
+    //                        boolean isFirstResource) {
+    //                      return false;
+    //                    }
+    //
+    //                    @Override
+    //                    public boolean onResourceReady(
+    //                        Bitmap bitmap,
+    //                        Object model,
+    //                        Target<Bitmap> target,
+    //                        DataSource dataSource,
+    //                        boolean isFirstResource) {
+    //                      if (ContextCompat.checkSelfPermission(
+    //                              SavedActionBottomSheetFragment.this.mContext,
+    //                              Manifest.permission.READ_EXTERNAL_STORAGE)
+    //                          == PackageManager.PERMISSION_GRANTED) {
+    //                        mProgress.setTitle(mContext.getString(R.string.downloading));
+    //                        mProgress.setMessage(
+    //                            mContext.getString(R.string.please_wait_image_is_downloading));
+    //                        mProgress.setCancelable(false);
+    //                        mProgress.show();
+    //                        Handler handler = new Handler();
+    //                        handler.postDelayed(
+    //                            () -> {
+    //                              imageSaveUtils.startDownloading(
+    //                                  SavedActionBottomSheetFragment.this.mContext,
+    // bitmap,getString(R.string._slash_pixxo));
+    //                              mProgress.dismiss();
+    //                              Toast.makeText(
+    //                                      SavedActionBottomSheetFragment.this.mContext,
+    //                                      R.string.downloaded,
+    //                                      Toast.LENGTH_SHORT)
+    //                                  .show();
+    //                            },
+    //                            1000);
+    //                      } else {
+    //                        ActivityCompat.requestPermissions(
+    //                            (Activity) SavedActionBottomSheetFragment.this.mContext,
+    //                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+    //                            STORAGE_PERMISSION_CODE);
+    //                      }
+    //                      return true;
+    //                    }
+    //                  })
+    //              .submit();
+    //          dismiss();
+    //        });
+    binding.selectDownload.setOnClickListener(
+        v -> {
+          Glide.with(getActivity())
+              .asBitmap()
+              .load(photo.getWebformatURL())
+              .listener(
+                  new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(
+                        @Nullable GlideException e,
+                        Object model,
+                        Target<Bitmap> target,
+                        boolean isFirstResource) {
+                      return false;
+                    }
 
-        @Override
-        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-          Toast.makeText(getActivity(), resource.getHeight(), Toast.LENGTH_LONG).show();
-          Log.d("BottomSheetFragment", "onResourceReady:" +  resource.getHeight());
-          return true;
-        }
-      });
-    });
+                    @Override
+                    public boolean onResourceReady(
+                        Bitmap resource,
+                        Object model,
+                        Target<Bitmap> target,
+                        DataSource dataSource,
+                        boolean isFirstResource) {
+                      Toast.makeText(getActivity(), resource.getHeight(), Toast.LENGTH_LONG).show();
+                      Log.d("BottomSheetFragment", "onResourceReady:" + resource.getHeight());
+                      return true;
+                    }
+                  });
+        });
     binding.selectShare.setOnClickListener(
         v -> {
           Glide.with(getActivity())

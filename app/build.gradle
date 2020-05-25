@@ -24,7 +24,7 @@ android {
         versionName versions.appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "API_KEY", API_KEY)
+        buildConfigField("String", "PIXXABAY_API_KEY", PIXXABAY_API_KEY)
         buildConfigField("String", "BASE_URL", BASE_URL)
     }
 
