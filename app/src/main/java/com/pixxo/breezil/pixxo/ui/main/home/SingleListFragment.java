@@ -1,9 +1,8 @@
 /**
  * Designed and developed by Kola Emiola
  *
- * <p>Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -15,6 +14,7 @@
 package com.pixxo.breezil.pixxo.ui.main.home;
 
 import static com.pixxo.breezil.pixxo.utils.Constant.CATEGORY;
+import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,8 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.transition.Visibility;
-
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSingleListBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.PhotoRecyclerViewAdapter;
@@ -102,7 +100,7 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
     PhotoLongClickListener photoLongClickListener =
         photo -> {
           ActionBottomSheetFragment actionBottomSheetFragment =
-              ActionBottomSheetFragment.getPhoto(photo);
+              ActionBottomSheetFragment.getPhoto(photo, FIRST_TYPE);
           actionBottomSheetFragment.show(getFragmentManager(), getString(R.string.do_something));
         };
     photoRecyclerViewAdapter =

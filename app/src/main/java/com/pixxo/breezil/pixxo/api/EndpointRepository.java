@@ -13,14 +13,13 @@
  */
 package com.pixxo.breezil.pixxo.api;
 
+import static com.pixxo.breezil.pixxo.BuildConfig.PIXXABAY_API_KEY;
 
 import com.pixxo.breezil.pixxo.model.PhotosResult;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
-
-import static com.pixxo.breezil.pixxo.BuildConfig.PIXXABAY_API_KEY;
 
 public class EndpointRepository {
 

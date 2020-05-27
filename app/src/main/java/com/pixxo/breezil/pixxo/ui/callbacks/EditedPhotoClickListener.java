@@ -11,14 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pixxo.breezil.pixxo.di.module;
+package com.pixxo.breezil.pixxo.ui.callbacks;
 
-import com.pixxo.breezil.pixxo.ui.bottom_sheet.SavedActionBottomSheetFragment;
-import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
+import com.pixxo.breezil.pixxo.model.EditedPhoto;
 
-@Module
-public abstract class SavedActionBottomSheetFragmentModule {
-  @ContributesAndroidInjector
-  abstract SavedActionBottomSheetFragment contributeSavedActionBottomSheetFragment();
+public interface EditedPhotoClickListener {
+  void showFullPicture(EditedPhoto editedPhoto);
 }

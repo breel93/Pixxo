@@ -13,30 +13,23 @@
  */
 package com.pixxo.breezil.pixxo.ui.main.saved;
 
+import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-import com.pixxo.breezil.pixxo.model.Photo;
-import com.pixxo.breezil.pixxo.repository.SavedRepository;
+import com.pixxo.breezil.pixxo.model.EditedPhoto;
+import com.pixxo.breezil.pixxo.repository.EditedPhotoRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SavedPhotosViewModel extends ViewModel {
-  private SavedRepository savedRepository;
+public class EditedPhotoViewModel extends ViewModel {
+  private EditedPhotoRepository editedPhotoRepository;
 
   @Inject
-  public SavedPhotosViewModel(SavedRepository savedRepository) {
-    this.savedRepository = savedRepository;
+  public EditedPhotoViewModel(EditedPhotoRepository editedPhotoRepository) {
+    this.editedPhotoRepository = editedPhotoRepository;
   }
 
-  public LiveData<List<Photo>> getSavedPhoto() {
-    return savedRepository.getSavedPhotos();
-  }
-
-  public LiveData<String> insertPhoto(Photo photo) {
-    return savedRepository.insertPhoto(photo);
-  }
-
-  public LiveData<String> deletePhoto(Photo photo) {
-    return savedRepository.deletePhoto(photo);
+  public LiveData<List<EditedPhoto>> getEditedPhotos(Context context, String path) {
+    return editedPhotoRepository.getEditedPhotos(context, path);
   }
 }

@@ -54,7 +54,6 @@ public class SavedPhotoRecyclerAdapter
           return oldItem.getRoomId() == newItem.getRoomId();
         }
 
-
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull Photo oldItem, @NonNull Photo newItem) {

@@ -13,6 +13,8 @@
  */
 package com.pixxo.breezil.pixxo.ui.main.home;
 
+import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,9 +40,6 @@ import com.pixxo.breezil.pixxo.view_model.ViewModelFactory;
 import dagger.android.support.DaggerFragment;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.inject.Inject;
 
 /** A simple {@link Fragment} subclass. */
@@ -93,7 +92,7 @@ public class MainFragment extends DaggerFragment {
     PhotoLongClickListener photoLongClickListener =
         photo -> {
           ActionBottomSheetFragment actionBottomSheetFragment =
-              ActionBottomSheetFragment.getPhoto(photo);
+              ActionBottomSheetFragment.getPhoto(photo, FIRST_TYPE);
           actionBottomSheetFragment.show(
               getChildFragmentManager(), getString(R.string.do_something));
         };
@@ -105,7 +104,6 @@ public class MainFragment extends DaggerFragment {
         new PhotoRecyclerViewAdapter(getActivity(), photoClickListener, photoLongClickListener);
     binding.photoRecyclerView.hasFixedSize();
     binding.photoRecyclerView.setAdapter(adapter);
-
   }
 
   private void updateUi() {

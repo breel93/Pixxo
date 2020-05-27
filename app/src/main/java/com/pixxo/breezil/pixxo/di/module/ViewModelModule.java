@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.pixxo.breezil.pixxo.ui.main.MainViewModel;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.DetailViewModel;
+import com.pixxo.breezil.pixxo.ui.main.saved.EditedPhotoViewModel;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotosViewModel;
 import com.pixxo.breezil.pixxo.view_model.ViewModelFactory;
 import dagger.Binds;
@@ -40,6 +41,11 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(SavedPhotosViewModel.class)
   abstract ViewModel bindSavedPhotosViewModel(SavedPhotosViewModel savedPhotosViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(EditedPhotoViewModel.class)
+  abstract ViewModel bindEditedPhotoViewModel(EditedPhotoViewModel editedPhotoViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);

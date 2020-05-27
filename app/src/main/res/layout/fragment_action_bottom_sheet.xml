@@ -65,6 +65,19 @@
         android:textAlignment="center"
         android:textColor="@color/colorAccent" />
 
+    <TextView
+        android:layout_weight="@dimen/two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/ic_delete"
+        android:textColor="@color/colorAccent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/twoDP"
+        android:textAlignment="center"
+        android:id="@+id/select_delete"
+        android:drawablePadding="@dimen/twoDP"
+        android:text="@string/delete"/>
   </LinearLayout>
+
 
 </layout>

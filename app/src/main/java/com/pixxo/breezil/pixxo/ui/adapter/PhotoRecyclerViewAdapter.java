@@ -177,7 +177,7 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
     }
   }
 
-  public class NetworkStateItemViewHolder extends RecyclerView.ViewHolder {
+  public static class NetworkStateItemViewHolder extends RecyclerView.ViewHolder {
 
     private ItemNetworkStateBinding binding;
 

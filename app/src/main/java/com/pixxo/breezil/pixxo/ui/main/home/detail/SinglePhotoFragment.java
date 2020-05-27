@@ -13,6 +13,7 @@
  */
 package com.pixxo.breezil.pixxo.ui.main.home.detail;
 
+import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
 import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
 
 import android.annotation.SuppressLint;
@@ -99,7 +100,7 @@ public class SinglePhotoFragment extends DaggerFragment {
 
     binding.detailFloatBtn.setOnClickListener(
         v -> {
-          actionBottomSheetFragment = ActionBottomSheetFragment.getPhoto(photo);
+          actionBottomSheetFragment = ActionBottomSheetFragment.getPhoto(photo, FIRST_TYPE);
           actionBottomSheetFragment.show(getChildFragmentManager(), getString(R.string.get));
         });
     binding.singleImageTitle.setText(photo.getTags());

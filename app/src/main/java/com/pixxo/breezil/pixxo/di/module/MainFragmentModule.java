@@ -16,6 +16,8 @@ package com.pixxo.breezil.pixxo.di.module;
 import com.pixxo.breezil.pixxo.ui.main.home.MainContainerFragment;
 import com.pixxo.breezil.pixxo.ui.main.home.MainFragment;
 import com.pixxo.breezil.pixxo.ui.main.home.SingleListFragment;
+import com.pixxo.breezil.pixxo.ui.main.home.detail.SingleEditedPhotoFragment;
+import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
 import com.pixxo.breezil.pixxo.ui.main.saved.SaveAndEditFragment;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -34,4 +36,10 @@ public abstract class MainFragmentModule {
 
   @ContributesAndroidInjector
   abstract MainContainerFragment contributeMainContainerFragment();
+
+  @ContributesAndroidInjector
+  abstract SinglePhotoFragment contributeSinglePhotoFragment();
+
+  @ContributesAndroidInjector
+  abstract SingleEditedPhotoFragment contributeSingleEditedPhotoFragment();
 }

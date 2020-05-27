@@ -13,6 +13,8 @@
  */
 package com.pixxo.breezil.pixxo.ui.main.saved;
 
+import static com.pixxo.breezil.pixxo.utils.Constant.SAVED_TYPE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSavedPhotoBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.SavedPhotoRecyclerAdapter;
-import com.pixxo.breezil.pixxo.ui.bottom_sheet.SavedActionBottomSheetFragment;
+import com.pixxo.breezil.pixxo.ui.bottom_sheet.ActionBottomSheetFragment;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoLongClickListener;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
@@ -77,8 +79,8 @@ public class SavedPhotoFragment extends DaggerFragment {
 
     PhotoLongClickListener photoLongClickListener =
         photo -> {
-          SavedActionBottomSheetFragment savedActionBottomSheetFragment =
-              SavedActionBottomSheetFragment.getSavedPhoto(photo);
+          ActionBottomSheetFragment savedActionBottomSheetFragment =
+              ActionBottomSheetFragment.getPhoto(photo, SAVED_TYPE);
           savedActionBottomSheetFragment.show(
               getFragmentManager(), getString(R.string.do_something));
         };

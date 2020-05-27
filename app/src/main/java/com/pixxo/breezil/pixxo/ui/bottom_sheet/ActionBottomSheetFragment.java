@@ -13,8 +13,11 @@
  */
 package com.pixxo.breezil.pixxo.ui.bottom_sheet;
 
+import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
+import static com.pixxo.breezil.pixxo.utils.Constant.SAVED_TYPE;
 import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
 import static com.pixxo.breezil.pixxo.utils.Constant.STORAGE_PERMISSION_CODE;
+import static com.pixxo.breezil.pixxo.utils.Constant.TYPE;
 
 import android.Manifest;
 import android.app.Activity;
@@ -67,10 +70,11 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
 
   @Inject ViewModelProvider.Factory viewModelFactory;
 
-  public static ActionBottomSheetFragment getPhoto(Photo photo) {
+  public static ActionBottomSheetFragment getPhoto(Photo photo, String type) {
     ActionBottomSheetFragment fragment = new ActionBottomSheetFragment();
     Bundle args = new Bundle();
     args.putParcelable(SINGLE_PHOTO, photo);
+    args.putString(TYPE, type);
     fragment.setArguments(args);
     return fragment;
   }
@@ -89,6 +93,11 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
     imageSaveUtils = new ImageSaveUtils(mContext);
     mProgress = new ProgressDialog(mContext);
     viewModel = new ViewModelProvider(this, viewModelFactory).get(SavedPhotosViewModel.class);
+    if (getType().equals(FIRST_TYPE)) {
+      binding.selectDelete.setVisibility(View.GONE);
+    } else if (getType().equals(SAVED_TYPE)) {
+      binding.selectSaved.setVisibility(View.GONE);
+    }
     updateUi(getPhoto());
     return binding.getRoot();
   }
@@ -101,46 +110,81 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
   }
 
   private void updateUi(Photo photo) {
+    edit(photo);
+    download(photo);
+    saved(photo);
+    delete(photo);
+    share(photo);
+  }
 
-    binding.selectEdit.setOnClickListener(
+  private void share(Photo photo) {
+    binding.selectShare.setOnClickListener(
         v -> {
-          Glide.with(this)
+          Glide.with(getActivity())
+              .asBitmap()
               .load(photo.getWebformatURL())
               .listener(
-                  new RequestListener<Drawable>() {
+                  new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(
                         @Nullable GlideException e,
                         Object model,
-                        Target<Drawable> target,
+                        Target<Bitmap> target,
                         boolean isFirstResource) {
                       Toast.makeText(
                               ActionBottomSheetFragment.this.mContext,
-                              R.string.cant_edit_until_image_is_displayed,
+                              R.string.cant_share_until_image_is_loaded,
                               Toast.LENGTH_SHORT)
                           .show();
-                      return true;
+                      return false;
                     }
 
                     @Override
                     public boolean onResourceReady(
-                        Drawable resource,
+                        Bitmap bitmap,
                         Object model,
-                        Target<Drawable> target,
+                        Target<Bitmap> target,
                         DataSource dataSource,
                         boolean isFirstResource) {
-                      Intent editIntent =
-                          new Intent(
-                              ActionBottomSheetFragment.this.mContext, EditImageActivity.class);
-                      editIntent.putExtra(SINGLE_PHOTO, photo.getWebformatURL());
-                      ActionBottomSheetFragment.this.mContext.startActivity(editIntent);
+                      startSharing(
+                          imageSaveUtils.getLocalBitmapUri(
+                              bitmap, ActionBottomSheetFragment.this.mContext));
+
                       return true;
                     }
                   })
               .submit();
           dismiss();
         });
+  }
 
+  private void delete(Photo photo) {
+    binding.selectDelete.setOnClickListener(
+        v ->
+            viewModel
+                .deletePhoto(photo)
+                .observe(
+                    getViewLifecycleOwner(),
+                    s -> {
+                      Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                      dismiss();
+                    }));
+  }
+
+  private void saved(Photo photo) {
+    binding.selectSaved.setOnClickListener(
+        v ->
+            viewModel
+                .insertPhoto(photo)
+                .observe(
+                    getViewLifecycleOwner(),
+                    s -> {
+                      Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                      dismiss();
+                    }));
+  }
+
+  private void download(Photo photo) {
     binding.selectDownload.setOnClickListener(
         v -> {
           Glide.with(getActivity())
@@ -218,50 +262,41 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
               .submit();
           dismiss();
         });
+  }
 
-    binding.selectSaved.setOnClickListener(
-        v ->
-            viewModel
-                .insertPhoto(photo)
-                .observe(
-                    getViewLifecycleOwner(),
-                    s -> {
-                      Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
-                      dismiss();
-                    }));
-
-    binding.selectShare.setOnClickListener(
+  private void edit(Photo photo) {
+    binding.selectEdit.setOnClickListener(
         v -> {
-          Glide.with(getActivity())
-              .asBitmap()
+          Glide.with(this)
               .load(photo.getWebformatURL())
               .listener(
-                  new RequestListener<Bitmap>() {
+                  new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(
                         @Nullable GlideException e,
                         Object model,
-                        Target<Bitmap> target,
+                        Target<Drawable> target,
                         boolean isFirstResource) {
                       Toast.makeText(
                               ActionBottomSheetFragment.this.mContext,
-                              R.string.cant_share_until_image_is_loaded,
+                              R.string.cant_edit_until_image_is_displayed,
                               Toast.LENGTH_SHORT)
                           .show();
-                      return false;
+                      return true;
                     }
 
                     @Override
                     public boolean onResourceReady(
-                        Bitmap bitmap,
+                        Drawable resource,
                         Object model,
-                        Target<Bitmap> target,
+                        Target<Drawable> target,
                         DataSource dataSource,
                         boolean isFirstResource) {
-                      startSharing(
-                          imageSaveUtils.getLocalBitmapUri(
-                              bitmap, ActionBottomSheetFragment.this.mContext));
-
+                      Intent editIntent =
+                          new Intent(
+                              ActionBottomSheetFragment.this.mContext, EditImageActivity.class);
+                      editIntent.putExtra(SINGLE_PHOTO, photo.getWebformatURL());
+                      ActionBottomSheetFragment.this.mContext.startActivity(editIntent);
                       return true;
                     }
                   })
@@ -284,6 +319,14 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
   private Photo getPhoto() {
     if (getArguments().getParcelable(SINGLE_PHOTO) != null) {
       return getArguments().getParcelable(SINGLE_PHOTO);
+    } else {
+      return null;
+    }
+  }
+
+  private String getType() {
+    if (getArguments().getString(TYPE) != null) {
+      return getArguments().getString(TYPE);
     } else {
       return null;
     }

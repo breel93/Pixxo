@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="@dimen/twentyDP"
         android:elevation="5dp"
         android:padding="8dp"
         android:text="image title"
@@ -34,21 +35,22 @@
         android:textSize="@dimen/sixteenSP"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleCardImage" />
+        app:layout_constraintTop_toBottomOf="@+id/singleCardImage"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ImageView
         android:id="@+id/singleCardImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/placeholder"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/singleImageTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/closeSingleImage"/>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

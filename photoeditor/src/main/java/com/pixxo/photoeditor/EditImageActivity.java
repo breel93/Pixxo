@@ -77,6 +77,7 @@ public class EditImageActivity extends BaseActivity
   private static final String TAG = EditImageActivity.class.getSimpleName();
   public static final String EXTRA_IMAGE_PATHS = "extra_image_paths";
   public static String EDIT_IMAGE_URI_STRING = "edit_uri_string";
+  public static String EDITED_IMAGE_URI_STRING = "edited_uri_string";
   private static final int CAMERA_REQUEST = 1;
   private static final int PICK_REQUEST = 2;
   PhotoEditor mPhotoEditor;
@@ -111,6 +112,9 @@ public class EditImageActivity extends BaseActivity
     } else if (getIntent().hasExtra(EDIT_IMAGE_URI_STRING)) {
       galleryCameraString = getIntent().getStringExtra(EDIT_IMAGE_URI_STRING);
       uri = Uri.parse(getIntent().getStringExtra(EDIT_IMAGE_URI_STRING));
+    } else if (getIntent().hasExtra(EDITED_IMAGE_URI_STRING)) {
+
+      //      uri = Uri.fromFile(new File(getIntent().getStringExtra(EDITED_IMAGE_URI_STRING)));
     } else {
       finish();
       return;

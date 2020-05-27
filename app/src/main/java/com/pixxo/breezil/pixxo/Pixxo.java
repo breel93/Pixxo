@@ -18,7 +18,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import dagger.android.HasAndroidInjector;
 
-public class PixxoApp extends DaggerApplication implements HasAndroidInjector {
+public class Pixxo extends DaggerApplication implements HasAndroidInjector {
 
   @Override
   protected AndroidInjector<? extends DaggerApplication> applicationInjector() {

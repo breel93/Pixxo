@@ -11,14 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pixxo.breezil.pixxo.di.module;
+package com.pixxo.breezil.pixxo.ui.callbacks;
 
-import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
-import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
+import com.pixxo.breezil.pixxo.model.EditedPhoto;
 
-@Module
-public abstract class SinglePhotoFragmentModule {
-  @ContributesAndroidInjector
-  abstract SinglePhotoFragment contributeSinglePhotoFragment();
+public interface EditedPhotoLongClickListener {
+  void doSomething(EditedPhoto editedPhoto);
 }

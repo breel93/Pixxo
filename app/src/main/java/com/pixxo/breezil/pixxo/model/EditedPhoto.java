@@ -14,8 +14,10 @@
 package com.pixxo.breezil.pixxo.model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class EditedPhoto {
+public class EditedPhoto implements Parcelable {
   private String path;
   private boolean isDirectory;
   private Bitmap image;
@@ -26,8 +28,26 @@ public class EditedPhoto {
     this.image = image;
   }
 
-  public EditedPhoto() {
+  public EditedPhoto() {}
+
+  protected EditedPhoto(Parcel in) {
+    path = in.readString();
+    isDirectory = in.readByte() != 0;
+    image = in.readParcelable(Bitmap.class.getClassLoader());
   }
+
+  public static final Creator<EditedPhoto> CREATOR =
+      new Creator<EditedPhoto>() {
+        @Override
+        public EditedPhoto createFromParcel(Parcel in) {
+          return new EditedPhoto(in);
+        }
+
+        @Override
+        public EditedPhoto[] newArray(int size) {
+          return new EditedPhoto[size];
+        }
+      };
 
   public boolean isDirectory() {
     return isDirectory;
@@ -51,5 +71,17 @@ public class EditedPhoto {
 
   public void setImage(Bitmap image) {
     this.image = image;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(path);
+    dest.writeByte((byte) (isDirectory ? 1 : 0));
+    dest.writeParcelable(image, flags);
   }
 }

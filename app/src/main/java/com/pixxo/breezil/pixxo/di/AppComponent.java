@@ -14,15 +14,13 @@
 package com.pixxo.breezil.pixxo.di;
 
 import android.app.Application;
-import com.pixxo.breezil.pixxo.PixxoApp;
+import com.pixxo.breezil.pixxo.Pixxo;
 import com.pixxo.breezil.pixxo.di.module.ActionBottomSheetFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.AppModule;
 import com.pixxo.breezil.pixxo.di.module.BaseActivityModule;
 import com.pixxo.breezil.pixxo.di.module.MainActivityModule;
-import com.pixxo.breezil.pixxo.di.module.SavedActionBottomSheetFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.SavedFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.SettingsActivityModule;
-import com.pixxo.breezil.pixxo.di.module.SinglePhotoFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.SplashActivityModule;
 import com.pixxo.breezil.pixxo.di.module.ViewModelModule;
 import dagger.BindsInstance;
@@ -42,11 +40,9 @@ import javax.inject.Singleton;
       BaseActivityModule.class,
       SplashActivityModule.class,
       ActionBottomSheetFragmentModule.class,
-      SavedActionBottomSheetFragmentModule.class,
-      SinglePhotoFragmentModule.class,
       ViewModelModule.class
     })
-public interface AppComponent extends AndroidInjector<PixxoApp> {
+public interface AppComponent extends AndroidInjector<Pixxo> {
   @Component.Builder
   interface Builder {
     @BindsInstance
