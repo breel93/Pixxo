@@ -13,6 +13,7 @@
  */
 package com.pixxo.breezil.pixxo.ui;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -23,8 +24,9 @@ import dagger.android.support.DaggerAppCompatActivity;
 public class BaseActivity extends DaggerAppCompatActivity {
   private SharedPreferences sharedPreferences;
 
-  boolean themeMode;
+  boolean themeMode = false;
 
+  @SuppressLint("SourceLockedOrientationActivity")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 

@@ -22,47 +22,74 @@ public class MockTestUtil {
 
   public static PhotosResult mockImageResult(int id) {
     PhotosResult photosResult = new PhotosResult();
-    photosResult.setHits(mockImageList(id));
+    photosResult.setHits(mockPhotoList(id));
     return photosResult;
   }
 
-  public static List<Photo> mockImageList(int id) {
+  public static PhotosResult mockImageResult() {
+    PhotosResult photosResult = new PhotosResult();
+    photosResult.setHits(mockPhotoList());
+    photosResult.setTotal(5869);
+    photosResult.setTotalHits(500);
+    return photosResult;
+  }
+
+  public static List<Photo> mockPhotoList(int id) {
     List<Photo> photoList = new ArrayList<>();
 
     Photo photo = new Photo();
-    photo.setId(id);
+    photo.setPhoto_id(id);
     photoList.add(photo);
 
     Photo photo2 = new Photo();
-    photo.setId(id);
+    photo.setPhoto_id(id);
     photoList.add(photo2);
 
     return photoList;
   }
 
-  public static Photo mockImage(int id) {
+  public static List<Photo> mockPhotoList() {
+    List<Photo> photoList = new ArrayList<>();
+
+    Photo photo =
+        new Photo(
+            "https://pixabay.com/get/55e2dc414351ae14f6da8c7dda79367e1c3dd8e755506c48702679d29249cd5cbf_1280.jpg",
+            3292932,
+            "https://pixabay.com/get/55e2dc414351ae14f1dc8460962937771739dce3524c704c7c2d7dd19345c15f_640.jpg",
+            640,
+            400,
+            "photo",
+            "sunflower, vase, vintage");
+    photoList.add(photo);
+
+    Photo photo2 =
+        new Photo(
+            "https://pixabay.com/get/55e1d4404953a414f6da8c7dda79367e1c3dd8e755506c48702679d29249cd5cbf_1280.jpg",
+            3113318,
+            "https://pixabay.com/get/55e1d4404953a414f1dc8460962937771739dce3524c704c7c2d7dd19345c15f_640.jpg",
+            640,
+            426,
+            "photo",
+            "sunflower, nature, flora");
+    photoList.add(photo2);
+
+    return photoList;
+  }
+
+  public static Photo mockPhoto(int id) {
     Photo photo = new Photo();
-    photo.setId(id);
+    photo.setRoomId(id);
     return photo;
   }
 
-  public static List<SavedImageModel> mockSavedImageList(int id) {
-    List<SavedImageModel> savedImageModelList = new ArrayList<>();
-
-    SavedImageModel savedImageModel = new SavedImageModel();
-    savedImageModel.setId(id);
-    savedImageModelList.add(savedImageModel);
-
-    SavedImageModel imagesModel2 = new SavedImageModel();
-    savedImageModel.setId(id);
-    savedImageModelList.add(imagesModel2);
-
-    return savedImageModelList;
-  }
-
-  public static SavedImageModel mockSavedImage(int id) {
-    SavedImageModel savedImageModel = new SavedImageModel();
-    savedImageModel.setId(id);
-    return savedImageModel;
+  public static Photo mockPhoto() {
+    return new Photo(
+        "https://pixabay.com/get/55e2dc414351ae14f6da8c7dda79367e1c3dd8e755506c48702679d29249cd5cbf_1280.jpg",
+        3292932,
+        "https://pixabay.com/get/55e2dc414351ae14f1dc8460962937771739dce3524c704c7c2d7dd19345c15f_640.jpg",
+        640,
+        400,
+        "photo",
+        "sunflower, vase, vintage");
   }
 }

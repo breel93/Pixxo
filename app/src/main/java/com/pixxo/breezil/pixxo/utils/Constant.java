@@ -40,27 +40,9 @@ public class Constant {
   public static int ZERO = 0;
   public static int ONE = 1;
   public static int TWO = 2;
-  public static int FIVE_HUNDRED = 500;
-  public static int ONE_THOUSAND = 2000;
-  public static int TWO_THOUSAND = 1000;
   public static int FOUR = 4;
   public static int FIVE = 5;
   public static int TEN = 10;
-  public static int ONE_HUNDRED = 100;
-  public static int DELAY = 800;
-
-  public static final String NOTE_TITLE_NULL = "Note title cannot be null";
-  public static final String INVALID_NOTE_ID = "Invalid id. Can't delete note";
-  public static final String DELETE_SUCCESS = "Delete success";
-  public static final String DELETE_FAILURE = "Delete failure";
-  public static final String UPDATE_SUCCESS = "Update success";
-  public static final String UPDATE_FAILURE = "Update failure";
-  public static final String INSERT_SUCCESS = "Insert success";
-  public static final String INSERT_FAILURE = "Insert failure";
-
-  private int timeDelay = 0;
-  private TimeUnit timeUnit = TimeUnit.SECONDS;
-
   public static String SINGLE_PHOTO = "single_photo";
   public static String TYPE = "type";
   public static String CATEGORY = "category";

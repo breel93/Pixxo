@@ -15,6 +15,7 @@ package com.pixxo.breezil.pixxo.api;
 
 import androidx.annotation.Nullable;
 import com.pixxo.breezil.pixxo.model.PhotosResult;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -22,6 +23,16 @@ import retrofit2.http.Query;
 public interface PhotoApi {
   @GET("api/")
   Single<PhotosResult> getPhotos(
+      @Query("key") @Nullable String key,
+      @Query("q") @Nullable String search,
+      @Query("lang") @Nullable String lang,
+      @Query("category") @Nullable String category,
+      @Query("order") @Nullable String order,
+      @Query("page") int page,
+      @Query("per_page") int per_page);
+
+  @GET("api/")
+  Flowable<PhotosResult> getPhotoss(
       @Query("key") @Nullable String key,
       @Query("q") @Nullable String search,
       @Query("lang") @Nullable String lang,

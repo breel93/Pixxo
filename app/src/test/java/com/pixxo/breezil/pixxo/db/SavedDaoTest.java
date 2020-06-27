@@ -13,24 +13,52 @@
  */
 package com.pixxo.breezil.pixxo.db;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.pixxo.breezil.pixxo.MockTestUtil;
 import com.pixxo.breezil.pixxo.model.Photo;
+import com.pixxo.breezil.pixxo.util.LiveDataTestUtil;
+import java.util.List;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class SavedDaoTest extends AppDatabaseTest {
 
+  @Rule public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
+
   @Test
-  public void inserAndReadImageModelTest() {
+  public void insertPhotoModelTest() {
     Photo photo;
-    photo = MockTestUtil.mockImage(5);
+    photo = MockTestUtil.mockPhoto(5);
+    db.imagesDao().insert(photo);
+    Photo savedPhoto = db.imagesDao().getPhotoById(5);
+    Assert.assertEquals(5, savedPhoto.getRoomId());
+  }
+
+  @Test
+  public void deletePhotoModelTest() {
+    Photo photo;
+    photo = MockTestUtil.mockPhoto(5);
+    db.imagesDao().delete(photo);
+    Photo savedPhoto = db.imagesDao().getPhotoById(5);
+    Assert.assertNull(savedPhoto);
+  }
+
+  @Test
+  public void getPhotosTest() throws Exception {
+    Photo photo = MockTestUtil.mockPhoto();
 
     db.imagesDao().insert(photo);
 
-    Photo storedImage = db.imagesDao().getImageById(5).getValue();
-    Assert.assertEquals(5, storedImage.getId());
+    LiveDataTestUtil<List<Photo>> liveDataTestUtil = new LiveDataTestUtil<>();
+    List<Photo> photoList = liveDataTestUtil.getValue(db.imagesDao().getSavedPhoto());
+    assertNotNull(photoList);
+    assertEquals(photo.getPhoto_id(), photoList.get(0).getPhoto_id());
   }
 }

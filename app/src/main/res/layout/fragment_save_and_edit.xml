@@ -58,8 +58,9 @@
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:id="@+id/gotoPreference"
             android:layout_weight="1"
-            android:src="@drawable/ic_more_vert" />
+            android:src="@drawable/ic_settings" />
       </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

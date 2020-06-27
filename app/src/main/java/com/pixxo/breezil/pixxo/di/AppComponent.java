@@ -19,8 +19,6 @@ import com.pixxo.breezil.pixxo.di.module.ActionBottomSheetFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.AppModule;
 import com.pixxo.breezil.pixxo.di.module.BaseActivityModule;
 import com.pixxo.breezil.pixxo.di.module.MainActivityModule;
-import com.pixxo.breezil.pixxo.di.module.SavedFragmentModule;
-import com.pixxo.breezil.pixxo.di.module.SettingsActivityModule;
 import com.pixxo.breezil.pixxo.di.module.SplashActivityModule;
 import com.pixxo.breezil.pixxo.di.module.ViewModelModule;
 import dagger.BindsInstance;
@@ -35,8 +33,6 @@ import javax.inject.Singleton;
       AndroidInjectionModule.class,
       AppModule.class,
       MainActivityModule.class,
-      SavedFragmentModule.class,
-      SettingsActivityModule.class,
       BaseActivityModule.class,
       SplashActivityModule.class,
       ActionBottomSheetFragmentModule.class,

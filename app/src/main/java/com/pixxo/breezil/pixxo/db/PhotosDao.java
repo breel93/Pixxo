@@ -31,6 +31,9 @@ public interface PhotosDao {
   @Delete
   void delete(Photo photo);
 
+  @Query("SELECt * FROM photo_table where roomId = :id")
+  Photo getPhotoById(int id);
+
   @Query("SELECT * FROM photo_table ORDER BY roomId DESC")
   LiveData<List<Photo>> getSavedPhoto();
 }

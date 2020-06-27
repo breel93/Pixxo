@@ -11,14 +11,25 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pixxo.breezil.pixxo.di.module;
+package com.pixxo.breezil.pixxo.repository;
 
-import com.pixxo.breezil.pixxo.ui.settings.SettingsActivity;
-import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
+import static org.junit.Assert.*;
 
-@Module
-public abstract class SettingsActivityModule {
-  @ContributesAndroidInjector(modules = SettingsFragmentModule.class)
-  abstract SettingsActivity contributeSettingsActivity();
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+public class EditedPhotoRepositoryTest {
+  @Rule public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
+
+  @Before
+  public void setUp() throws Exception {}
+
+  @After
+  public void tearDown() throws Exception {}
+
+  @Test
+  public void getEditedPhotos() {}
 }

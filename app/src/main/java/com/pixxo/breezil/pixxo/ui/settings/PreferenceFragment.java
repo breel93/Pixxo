@@ -13,9 +13,6 @@
  */
 package com.pixxo.breezil.pixxo.ui.settings;
 
-import static com.pixxo.breezil.pixxo.utils.Constant.ZERO;
-
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -24,22 +21,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.preference.ListPreference;
-import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import com.pixxo.breezil.pixxo.R;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import timber.log.Timber;
 
 public class PreferenceFragment extends PreferenceFragmentCompat
     implements SharedPreferences.OnSharedPreferenceChangeListener {
-  private MultiSelectListPreference mCategoryPref;
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -47,10 +39,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat
 
     PreferenceManager.setDefaultValues(
         Objects.requireNonNull(getActivity()), R.xml.preference, false);
-
-    PreferenceGroup preferenceGroup = (PreferenceGroup) getPreferenceScreen().getPreference(ZERO);
-
-    mCategoryPref = (MultiSelectListPreference) preferenceGroup.getPreference(ZERO);
 
     initSummary(getPreferenceScreen());
   }
@@ -68,13 +56,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat
     if (!key.equals(getString(R.string.pref_category_key))) {
       updateSummary(findPreference(key));
       updateNightMode(findPreference(key));
-      restartActivity();
-
-    } else {
-      updateMultiSummary(
-          findPreference(key),
-          sharedPreferences.getStringSet(getString(R.string.pref_category_key), null));
-      restartActivity();
+      Objects.requireNonNull(getActivity()).recreate();
     }
   }
 
@@ -86,10 +68,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat
       }
     } else {
       updateSummary(p);
-      updateMultiSummary(
-          p,
-          PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getActivity()))
-              .getStringSet(getString(R.string.pref_category_key), null));
       updateNightMode(p);
     }
   }
@@ -98,29 +76,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat
     if (p instanceof ListPreference) {
       ListPreference listPref = (ListPreference) p;
       p.setSummary(listPref.getEntry());
-    }
-  }
-
-  private void updateMultiSummary(Preference p, Set<String> value) {
-    if (p instanceof MultiSelectListPreference) {
-      MultiSelectListPreference multiSelectListPreference = (MultiSelectListPreference) p;
-
-      List<String> entries = new ArrayList<>(value);
-      StringBuilder allEntries = new StringBuilder();
-
-      for (int i = 0; i < entries.size(); i++) {
-        allEntries
-            .append(
-                multiSelectListPreference
-                    .getEntries()[multiSelectListPreference.findIndexOfValue(entries.get(i))])
-            .append(", ");
-      }
-
-      if (allEntries.length() > 0) {
-        allEntries.deleteCharAt(allEntries.length() - 2);
-      }
-
-      p.setSummary(allEntries.toString());
     }
   }
 
@@ -153,11 +108,5 @@ public class PreferenceFragment extends PreferenceFragmentCompat
   public void onStop() {
     getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     super.onStop();
-  }
-
-  public void restartActivity() {
-    Intent intent = new Intent(getActivity(), SettingsActivity.class);
-    startActivity(intent);
-    getActivity().finish();
   }
 }

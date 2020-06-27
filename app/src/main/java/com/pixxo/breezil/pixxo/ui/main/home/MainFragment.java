@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -36,6 +35,7 @@ import com.pixxo.breezil.pixxo.ui.callbacks.PhotoLongClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.QuickSelectListener;
 import com.pixxo.breezil.pixxo.ui.main.MainViewModel;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
+import com.pixxo.breezil.pixxo.ui.settings.SettingsFragment;
 import com.pixxo.breezil.pixxo.view_model.ViewModelFactory;
 import dagger.android.support.DaggerFragment;
 import java.util.Arrays;
@@ -149,6 +149,7 @@ public class MainFragment extends DaggerFragment {
             return false;
           }
         });
+
   }
 
   private void updateQuickSearch() {
@@ -223,7 +224,20 @@ public class MainFragment extends DaggerFragment {
   }
 
   private void gotoOptionSelect() {
-    binding.selectOption.setOnClickListener(
-        v -> Toast.makeText(getContext(), "Select Option", Toast.LENGTH_LONG).show());
+    binding.gotoPreference.setOnClickListener(
+        v -> {
+          SettingsFragment fragment = new SettingsFragment();
+          getFragmentManager()
+              .beginTransaction()
+              .setCustomAnimations(
+                  R.anim.fragment_slide_in,
+                  R.anim.fragment_slide_out,
+                  R.anim.fragment_pop_slide_in,
+                  R.anim.fragment_pop_slide_out)
+              .add(R.id.parent_container, fragment)
+              .addToBackStack("settings")
+              .hide(this)
+              .commit();
+        });
   }
 }

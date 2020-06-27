@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSaveAndEditBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.SavedPagerAdapter;
+import com.pixxo.breezil.pixxo.ui.settings.SettingsFragment;
 import dagger.android.support.AndroidSupportInjection;
 import java.lang.reflect.Field;
 
@@ -49,7 +50,7 @@ public class SaveAndEditFragment extends Fragment {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_save_and_edit, container, false);
 
     setupAdapter();
-
+    gotoOptionSelect();
     return binding.getRoot();
   }
 
@@ -73,5 +74,23 @@ public class SaveAndEditFragment extends Fragment {
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private void gotoOptionSelect() {
+    binding.gotoPreference.setOnClickListener(
+        v -> {
+          SettingsFragment fragment = new SettingsFragment();
+          getFragmentManager()
+              .beginTransaction()
+              .setCustomAnimations(
+                  R.anim.fragment_slide_in,
+                  R.anim.fragment_slide_out,
+                  R.anim.fragment_pop_slide_in,
+                  R.anim.fragment_pop_slide_out)
+              .add(R.id.parent_container, fragment)
+              .addToBackStack("settings")
+              .hide(this)
+              .commit();
+        });
   }
 }

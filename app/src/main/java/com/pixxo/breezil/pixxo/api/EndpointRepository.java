@@ -16,6 +16,7 @@ package com.pixxo.breezil.pixxo.api;
 import static com.pixxo.breezil.pixxo.BuildConfig.PIXXABAY_API_KEY;
 
 import com.pixxo.breezil.pixxo.model.PhotosResult;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -34,6 +35,15 @@ public class EndpointRepository {
       String search, String lang, String category, String order, int page, int per_page) {
     return photoApi
         .getPhotos(PIXXABAY_API_KEY, search, lang, category, order, page, per_page)
+        .retry(3)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+  }
+
+  public Flowable<PhotosResult> getPhotoss(
+      String search, String lang, String category, String order, int page, int per_page) {
+    return photoApi
+        .getPhotoss(PIXXABAY_API_KEY, search, lang, category, order, page, per_page)
         .retry(3)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread());

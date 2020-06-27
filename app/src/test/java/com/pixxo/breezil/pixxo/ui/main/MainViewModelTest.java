@@ -18,6 +18,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.pixxo.breezil.pixxo.model.Photo;
+import com.pixxo.breezil.pixxo.repository.paging.PhotoDataSource;
+import com.pixxo.breezil.pixxo.repository.paging.PhotoDataSourceFactory;
+import com.pixxo.breezil.pixxo.utils.helper.AppExecutors;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,15 +36,22 @@ public class MainViewModelTest {
 
   @Mock MutableLiveData<List<Photo>> listMutableLiveData;
 
+  @Mock PhotoDataSourceFactory photoDataSourceFactory;
+  @Mock
+  PhotoDataSource dataSource;
+  @Mock AppExecutors appsExecutor;
+
   @Rule public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
   @Before
   public void init() {
-    Application app =
-        (Application) InstrumentationRegistry.getTargetContext().getApplicationContext();
-    //        mainViewModel = new MainViewModel(app);
+    PhotoDataSourceFactory photoDataSourceFactory;
+    Application app = (Application) InstrumentationRegistry.getInstrumentation().getContext();
+    appsExecutor = new AppExecutors();
   }
 
   @Test
-  public void imageListTest() {}
+  public void imageListTest() {
+
+  }
 }
