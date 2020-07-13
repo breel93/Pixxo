@@ -13,12 +13,6 @@
  */
 package com.pixxo.breezil.pixxo.ui.bottom_sheet;
 
-import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
-import static com.pixxo.breezil.pixxo.utils.Constant.SAVED_TYPE;
-import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
-import static com.pixxo.breezil.pixxo.utils.Constant.STORAGE_PERMISSION_CODE;
-import static com.pixxo.breezil.pixxo.utils.Constant.TYPE;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -34,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -41,11 +36,10 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentActionBottomSheetBinding;
@@ -53,10 +47,20 @@ import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.ui.ImageSaveUtils;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotosViewModel;
 import com.pixxo.photoeditor.EditImageActivity;
-import dagger.android.support.AndroidSupportInjection;
+
 import javax.inject.Inject;
 
-/** A simple {@link Fragment} subclass. */
+import dagger.android.support.AndroidSupportInjection;
+
+import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
+import static com.pixxo.breezil.pixxo.utils.Constant.SAVED_TYPE;
+import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
+import static com.pixxo.breezil.pixxo.utils.Constant.STORAGE_PERMISSION_CODE;
+import static com.pixxo.breezil.pixxo.utils.Constant.TYPE;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
 public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
 
   private FragmentActionBottomSheetBinding binding;
@@ -68,7 +72,8 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
 
   private ProgressDialog mProgress;
 
-  @Inject ViewModelProvider.Factory viewModelFactory;
+  @Inject
+  ViewModelProvider.Factory viewModelFactory;
 
   public static ActionBottomSheetFragment getPhoto(Photo photo, String type) {
     ActionBottomSheetFragment fragment = new ActionBottomSheetFragment();
@@ -119,43 +124,23 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
 
   private void share(Photo photo) {
     binding.selectShare.setOnClickListener(
-        v -> {
-          Glide.with(getActivity())
-              .asBitmap()
-              .load(photo.getWebformatURL())
-              .listener(
-                  new RequestListener<Bitmap>() {
-                    @Override
-                    public boolean onLoadFailed(
-                        @Nullable GlideException e,
-                        Object model,
-                        Target<Bitmap> target,
-                        boolean isFirstResource) {
-                      Toast.makeText(
-                              ActionBottomSheetFragment.this.mContext,
-                              R.string.cant_share_until_image_is_loaded,
-                              Toast.LENGTH_SHORT)
-                          .show();
-                      return false;
-                    }
+        v -> Glide.with(this)
+            .asBitmap()
+            .load(photo.getWebformatURL())
+            .into(new CustomTarget<Bitmap>() {
+              @Override
+              public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                startSharing(
+                    imageSaveUtils.getLocalBitmapUri(
+                        resource, requireContext()));
+                dismiss();
+              }
 
-                    @Override
-                    public boolean onResourceReady(
-                        Bitmap bitmap,
-                        Object model,
-                        Target<Bitmap> target,
-                        DataSource dataSource,
-                        boolean isFirstResource) {
-                      startSharing(
-                          imageSaveUtils.getLocalBitmapUri(
-                              bitmap, ActionBottomSheetFragment.this.mContext));
+              @Override
+              public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                      return true;
-                    }
-                  })
-              .submit();
-          dismiss();
-        });
+              }
+            }));
   }
 
   private void delete(Photo photo) {
@@ -186,123 +171,74 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
 
   private void download(Photo photo) {
     binding.selectDownload.setOnClickListener(
-        v -> {
-          Glide.with(getActivity())
-              .asBitmap()
-              .load(photo.getWebformatURL())
-              .listener(
-                  new RequestListener<Bitmap>() {
-                    @Override
-                    public boolean onLoadFailed(
-                        @Nullable GlideException e,
-                        Object model,
-                        Target<Bitmap> target,
-                        boolean isFirstResource) {
-                      getActivity()
-                          .runOnUiThread(
-                              new Runnable() {
-                                @Override
-                                public void run() {
-                                  Toast.makeText(
-                                          getContext(),
-                                          R.string.cant_download_until_images_is_loaded,
-                                          Toast.LENGTH_SHORT)
-                                      .show();
-                                }
-                              });
-                      dismiss();
-                      return true;
-                    }
+        v -> Glide.with(this)
+            .asBitmap()
+            .load(photo.getWebformatURL())
+            .into(new CustomTarget<Bitmap>() {
+              @Override
+              public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                if (ContextCompat.checkSelfPermission(
+                    ActionBottomSheetFragment.this.mContext,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
 
-                    @Override
-                    public boolean onResourceReady(
-                        Bitmap bitmap,
-                        Object model,
-                        Target<Bitmap> target,
-                        DataSource dataSource,
-                        boolean isFirstResource) {
-                      if (ContextCompat.checkSelfPermission(
-                              ActionBottomSheetFragment.this.mContext,
-                              Manifest.permission.READ_EXTERNAL_STORAGE)
-                          == PackageManager.PERMISSION_GRANTED) {
-                        getActivity()
-                            .runOnUiThread(
-                                () -> {
-                                  mProgress.setTitle(mContext.getString(R.string.downloading));
-                                  mProgress.setMessage(
-                                      mContext.getString(
-                                          R.string.please_wait_image_is_downloading));
-                                  mProgress.setCancelable(false);
-                                  mProgress.show();
-                                  Handler handler = new Handler();
-                                  handler.postDelayed(
-                                      () -> {
-                                        imageSaveUtils.startDownloading(
-                                            mContext, bitmap, getString(R.string._slash_pixxo));
-                                        mProgress.dismiss();
-                                        Toast.makeText(
-                                                ActionBottomSheetFragment.this.mContext,
-                                                R.string.downloaded,
-                                                Toast.LENGTH_SHORT)
-                                            .show();
-                                      },
-                                      1000);
-                                });
+                  mProgress.setTitle(requireContext().getString(R.string.downloading));
+                  mProgress.setMessage(
+                      requireContext().getString(
+                          R.string.please_wait_image_is_downloading));
+                  mProgress.setCancelable(false);
+                  mProgress.show();
+                  Handler handler = new Handler();
+                  handler.postDelayed(
+                      () -> {
+                        imageSaveUtils.startDownloading(
+                            requireContext(), resource, getString(R.string._slash_pixxo));
+                        mProgress.dismiss();
+                        Toast.makeText(
+//                            ActionBottomSheetFragment.this.mContext,
+                            requireContext(),
+                            R.string.downloaded,
+                            Toast.LENGTH_SHORT)
+                            .show();
+                        dismiss();
+                      },
+                      1000);
+                } else {
+                  ActivityCompat.requestPermissions(
+                      (Activity) ActionBottomSheetFragment.this.mContext,
+                      new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                      STORAGE_PERMISSION_CODE);
+                  dismiss();
+                }
+              }
 
-                      } else {
-                        ActivityCompat.requestPermissions(
-                            (Activity) ActionBottomSheetFragment.this.mContext,
-                            new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_CODE);
-                      }
-
-                      return true;
-                    }
-                  })
-              .submit();
-          dismiss();
-        });
+              @Override
+              public void onLoadCleared(@Nullable Drawable placeholder) {
+              }
+            }));
   }
 
   private void edit(Photo photo) {
     binding.selectEdit.setOnClickListener(
-        v -> {
-          Glide.with(this)
-              .load(photo.getWebformatURL())
-              .listener(
-                  new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(
-                        @Nullable GlideException e,
-                        Object model,
-                        Target<Drawable> target,
-                        boolean isFirstResource) {
-                      Toast.makeText(
-                              ActionBottomSheetFragment.this.mContext,
-                              R.string.cant_edit_until_image_is_displayed,
-                              Toast.LENGTH_SHORT)
-                          .show();
-                      return true;
-                    }
+        v -> Glide.with(this)
+            .asBitmap()
+            .load(photo.getWebformatURL())
+            .into(new CustomTarget<Bitmap>() {
+              @Override
+              public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                Intent editIntent =
+                    new Intent(
+                        requireContext(), EditImageActivity.class);
+                editIntent.putExtra(SINGLE_PHOTO, photo.getWebformatURL());
+                requireContext().startActivity(editIntent);
+                dismiss();
+              }
 
-                    @Override
-                    public boolean onResourceReady(
-                        Drawable resource,
-                        Object model,
-                        Target<Drawable> target,
-                        DataSource dataSource,
-                        boolean isFirstResource) {
-                      Intent editIntent =
-                          new Intent(
-                              ActionBottomSheetFragment.this.mContext, EditImageActivity.class);
-                      editIntent.putExtra(SINGLE_PHOTO, photo.getWebformatURL());
-                      ActionBottomSheetFragment.this.mContext.startActivity(editIntent);
-                      return true;
-                    }
-                  })
-              .submit();
-          dismiss();
-        });
+              @Override
+              public void onLoadCleared(@Nullable Drawable placeholder) {
+
+              }
+            }));
   }
 
   private void startSharing(Uri localBitmapUri) {
@@ -331,4 +267,6 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
       return null;
     }
   }
+
+
 }

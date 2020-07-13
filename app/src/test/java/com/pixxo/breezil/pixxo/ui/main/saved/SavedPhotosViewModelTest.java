@@ -91,10 +91,8 @@ public class SavedPhotosViewModelTest {
     when(repository.deletePhoto(photo)).thenReturn(returnData);
 
     // act
-
     savedPhotosViewModel.insertPhoto(photo);
     String observedResult = liveDataTestUtil.getValue(savedPhotosViewModel.deletePhoto(photo));
-
     Assert.assertEquals(expected, observedResult);
   }
 }

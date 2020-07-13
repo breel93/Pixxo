@@ -78,7 +78,7 @@ public class EndpointRepositoryTest {
         .thenReturn(Flowable.just(mockResult));
 
     // act
-    Flowable<PhotosResult> data = repository.getPhotoss("sunflower", "", "", "", 1, 20);
+    repository.getPhotoss("sunflower", "", "", "", 1, 20);
 
     // assert
     verify(photoApi).getPhotoss(PIXXABAY_API_KEY, "sunflower", "", "", "", 1, 20);
