@@ -14,12 +14,15 @@
 package com.pixxo.breezil.pixxo.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.PhotoViewItemBinding;
 import com.pixxo.breezil.pixxo.model.EditedPhoto;
@@ -70,6 +73,8 @@ public class EditPhotoRecyclerAdapter
   }
 
   class EditPhotoHolder extends RecyclerView.ViewHolder {
+    private boolean clicked = false;
+
     EditPhotoHolder(PhotoViewItemBinding photoViewItemBinding) {
       super(binding.getRoot());
       binding = photoViewItemBinding;
@@ -79,7 +84,14 @@ public class EditPhotoRecyclerAdapter
         EditedPhoto editedPhoto,
         EditedPhotoClickListener photoClickListener,
         EditedPhotoLongClickListener photoLongClickListener) {
-      itemView.setOnClickListener(v -> photoClickListener.showFullPicture(editedPhoto));
+      itemView.setOnClickListener(v -> {
+        if (!clicked) {
+          clicked = true;
+          photoClickListener.showFullPicture(editedPhoto);
+          Handler clickHandler = new Handler();
+          clickHandler.postDelayed(() -> clicked = false, 1000);
+        }
+      });
       itemView.setOnLongClickListener(
           v -> {
             photoLongClickListener.doSomething(editedPhoto);

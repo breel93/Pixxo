@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSavedPhotoBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.SavedPhotoRecyclerAdapter;
@@ -43,6 +45,8 @@ public class SavedPhotoFragment extends DaggerFragment {
   private SavedPhotosViewModel viewModel;
   private SavedPhotoRecyclerAdapter savedPhotoRecyclerAdapter;
 
+
+
   public SavedPhotoFragment() {
     // Required empty public constructor
   }
@@ -61,19 +65,19 @@ public class SavedPhotoFragment extends DaggerFragment {
   }
 
   private void setUpAdapter() {
+    SaveAndEditFragment saveAndEditFragment = new SaveAndEditFragment();
     PhotoClickListener photoClickListener =
         photo -> {
-          SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo);
-          getParentFragmentManager()
+          SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo, SAVED_TYPE);
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
-                  R.anim.fragment_slide_out,
-                  R.anim.fragment_pop_slide_in,
-                  R.anim.fragment_pop_slide_out)
-              .replace(R.id.parent_container, fragment)
+                  R.anim.fragment_slide_out)
+              .add(R.id.parent_container, fragment)
               .hide(this)
-              .addToBackStack("")
+              .hide(saveAndEditFragment)
+              .addToBackStack("saved_fragment")
               .commit();
         };
 
@@ -82,12 +86,15 @@ public class SavedPhotoFragment extends DaggerFragment {
           ActionBottomSheetFragment savedActionBottomSheetFragment =
               ActionBottomSheetFragment.getPhoto(photo, SAVED_TYPE);
           savedActionBottomSheetFragment.show(
-              getFragmentManager(), getString(R.string.do_something));
+              requireActivity().getSupportFragmentManager(), getString(R.string.do_something));
         };
 
     savedPhotoRecyclerAdapter =
-        new SavedPhotoRecyclerAdapter(getContext(), photoLongClickListener, photoClickListener);
+        new SavedPhotoRecyclerAdapter(requireActivity(), photoLongClickListener, photoClickListener);
+    StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
+        StaggeredGridLayoutManager.VERTICAL);
     binding.savedList.setHasFixedSize(true);
+    binding.savedList.setLayoutManager(layoutManager);
     binding.savedList.setAdapter(savedPhotoRecyclerAdapter);
   }
 
@@ -96,4 +103,5 @@ public class SavedPhotoFragment extends DaggerFragment {
         .getSavedPhoto()
         .observe(getViewLifecycleOwner(), photos -> savedPhotoRecyclerAdapter.submitList(photos));
   }
+
 }

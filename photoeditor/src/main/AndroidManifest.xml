@@ -12,7 +12,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".EditImageActivity"></activity>
+        <activity android:name=".EditImageActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"

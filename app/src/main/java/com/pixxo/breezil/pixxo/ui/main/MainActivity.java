@@ -15,15 +15,25 @@ package com.pixxo.breezil.pixxo.ui.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.databinding.DataBindingUtil;
+import androidx.transition.Slide;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
+
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.ActivityMainBinding;
 import com.pixxo.breezil.pixxo.ui.BaseActivity;
 import com.pixxo.breezil.pixxo.ui.adapter.PagerAdapter;
 import com.pixxo.breezil.pixxo.ui.bottom_sheet.ChoosePhotoBottomDialogFragment;
 import com.pixxo.breezil.pixxo.ui.main.home.MainFragment;
+import com.pixxo.breezil.pixxo.ui.main.home.detail.SingleEditedPhotoFragment;
+import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
 import com.pixxo.breezil.pixxo.ui.main.saved.SaveAndEditFragment;
 import com.pixxo.breezil.pixxo.utils.BottomNavigationHelper;
 import com.pixxo.breezil.pixxo.utils.ConnectionUtils;
@@ -33,7 +43,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
 @SuppressLint("RestrictedApi")
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements SinglePhotoFragment.SinglePhotoFragmentListener,
+    SingleEditedPhotoFragment.SingleEditedPhotoFragmentListener {
 
   public ActivityMainBinding binding;
   private ChoosePhotoBottomDialogFragment choosePhotoBottomDialogFragment =
@@ -64,7 +75,6 @@ public class MainActivity extends BaseActivity {
   }
 
   private void setupBottomNavigation() {
-
     pagerAdapter.addFragments(new MainFragment());
     pagerAdapter.addFragments(new SaveAndEditFragment());
     binding.mainViewPager.setAdapter(pagerAdapter);
@@ -93,6 +103,18 @@ public class MainActivity extends BaseActivity {
       case R.id.saved:
         binding.mainViewPager.setCurrentItem(1, true);
         break;
+    }
+  }
+
+  @Override
+  public void isOpened(Boolean opened) {
+    Transition transition = new Slide(Gravity.START);
+    transition.addTarget(binding.mainContainer);
+    TransitionManager.beginDelayedTransition(binding.parentContainer, transition);
+    if(opened){
+      binding.mainContainer.setVisibility(View.GONE);
+    }else{
+      binding.mainContainer.setVisibility(View.VISIBLE);
     }
   }
 }

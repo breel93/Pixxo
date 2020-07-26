@@ -13,19 +13,22 @@
  */
 package com.pixxo.breezil.pixxo.ui.main.home.detail;
 
-import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import com.pixxo.breezil.pixxo.model.Photo;
+import com.pixxo.breezil.pixxo.repository.SavedRepository;
+
 import javax.inject.Inject;
 
-public class DetailViewModel extends AndroidViewModel {
+public class DetailViewModel extends ViewModel {
+  private SavedRepository savedRepository;
 
   private MutableLiveData<Photo> imageModel = new MutableLiveData<>();
 
   @Inject
-  DetailViewModel(Application application) {
-    super(application);
+  DetailViewModel(SavedRepository savedRepository) {
+    this.savedRepository = savedRepository;
   }
 
   public void setImage(Photo image) {
@@ -34,5 +37,13 @@ public class DetailViewModel extends AndroidViewModel {
 
   public MutableLiveData<Photo> getImage() {
     return imageModel;
+  }
+
+  public LiveData<String> insertPhoto(Photo photo) {
+    return savedRepository.insertPhoto(photo);
+  }
+
+  public LiveData<String> deletePhoto(Photo photo) {
+    return savedRepository.deletePhoto(photo);
   }
 }

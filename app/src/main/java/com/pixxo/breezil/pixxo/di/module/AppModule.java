@@ -59,6 +59,7 @@ public class AppModule {
         };
     return Room.databaseBuilder(
             app.getApplicationContext(), AppDatabase.class, app.getString(R.string.pixxo_db))
+        .addMigrations(MIGRATION_1_2)
         .build();
   }
 

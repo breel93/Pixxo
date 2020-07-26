@@ -19,7 +19,7 @@ import com.pixxo.breezil.pixxo.model.Photo;
 
 @Database(
     entities = {Photo.class},
-    version = 1)
+    version = 2, exportSchema = false )
 public abstract class AppDatabase extends RoomDatabase {
   public abstract PhotosDao imagesDao();
 }

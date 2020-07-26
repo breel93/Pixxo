@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,11 +48,14 @@ import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.ui.ImageSaveUtils;
 import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotosViewModel;
 import com.pixxo.photoeditor.EditImageActivity;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
+import static android.app.Activity.RESULT_OK;
+import static com.pixxo.breezil.pixxo.utils.Constant.EDIT_IMAGE_URI_STRING;
 import static com.pixxo.breezil.pixxo.utils.Constant.FIRST_TYPE;
 import static com.pixxo.breezil.pixxo.utils.Constant.SAVED_TYPE;
 import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
@@ -64,7 +68,6 @@ import static com.pixxo.breezil.pixxo.utils.Constant.TYPE;
 public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
 
   private FragmentActionBottomSheetBinding binding;
-  private Context mContext;
 
   private ImageSaveUtils imageSaveUtils;
 
@@ -95,8 +98,8 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
     // Inflate the layout for this fragment
     binding =
         DataBindingUtil.inflate(inflater, R.layout.fragment_action_bottom_sheet, container, false);
-    imageSaveUtils = new ImageSaveUtils(mContext);
-    mProgress = new ProgressDialog(mContext);
+    imageSaveUtils = new ImageSaveUtils(requireContext());
+    mProgress = new ProgressDialog(requireContext());
     viewModel = new ViewModelProvider(this, viewModelFactory).get(SavedPhotosViewModel.class);
     if (getType().equals(FIRST_TYPE)) {
       binding.selectDelete.setVisibility(View.GONE);
@@ -110,7 +113,6 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
   @Override
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
-    this.mContext = context;
     AndroidSupportInjection.inject(this);
   }
 
@@ -151,7 +153,7 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
                 .observe(
                     getViewLifecycleOwner(),
                     s -> {
-                      Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                      Toast.makeText(requireContext(), s, Toast.LENGTH_LONG).show();
                       dismiss();
                     }));
   }
@@ -164,7 +166,7 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
                 .observe(
                     getViewLifecycleOwner(),
                     s -> {
-                      Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                      Toast.makeText(requireContext(), s, Toast.LENGTH_LONG).show();
                       dismiss();
                     }));
   }
@@ -178,8 +180,8 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
               @Override
               public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (ContextCompat.checkSelfPermission(
-                    ActionBottomSheetFragment.this.mContext,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
 
                   mProgress.setTitle(requireContext().getString(R.string.downloading));
@@ -191,11 +193,10 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
                   Handler handler = new Handler();
                   handler.postDelayed(
                       () -> {
-                        imageSaveUtils.startDownloading(
+                        imageSaveUtils.saveImage(
                             requireContext(), resource, getString(R.string._slash_pixxo));
                         mProgress.dismiss();
                         Toast.makeText(
-//                            ActionBottomSheetFragment.this.mContext,
                             requireContext(),
                             R.string.downloaded,
                             Toast.LENGTH_SHORT)
@@ -205,8 +206,8 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
                       1000);
                 } else {
                   ActivityCompat.requestPermissions(
-                      (Activity) ActionBottomSheetFragment.this.mContext,
-                      new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                      requireActivity(),
+                      new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                       STORAGE_PERMISSION_CODE);
                   dismiss();
                 }
@@ -226,12 +227,7 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
             .into(new CustomTarget<Bitmap>() {
               @Override
               public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                Intent editIntent =
-                    new Intent(
-                        requireContext(), EditImageActivity.class);
-                editIntent.putExtra(SINGLE_PHOTO, photo.getWebformatURL());
-                requireContext().startActivity(editIntent);
-                dismiss();
+                startEdit(resource);
               }
 
               @Override
@@ -268,5 +264,32 @@ public class ActionBottomSheetFragment extends BottomSheetDialogFragment {
     }
   }
 
+  private void startEdit(Bitmap bitmap){
+    Uri uri = imageSaveUtils.getLocalBitmapUri(
+        bitmap, requireContext());
+    try {
+      CropImage.activity(uri).start(requireContext(),this);
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    // copied from Aurthur Edmondo github for crop action
+    if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+      CropImage.ActivityResult result = CropImage.getActivityResult(data);
+      if (resultCode == RESULT_OK) {
+        Uri imageUri = result.getUri();
+        if(imageUri != null){
+          Intent editImageIntent = new Intent(getContext(), EditImageActivity.class);
+          editImageIntent.putExtra(EDIT_IMAGE_URI_STRING, String.valueOf(imageUri));
+          startActivity(editImageIntent);
+          dismiss();
+        }
+      }
+    }
+  }
 
 }

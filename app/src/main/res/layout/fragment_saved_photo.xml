@@ -45,8 +45,6 @@
             android:visibility="gone"
             />
 
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/saved_list"
             android:layout_width="match_parent"
@@ -55,15 +53,16 @@
             android:layout_marginTop="@dimen/twoDP"
             android:layout_marginEnd="@dimen/twoDP"
             android:layout_marginBottom="@dimen/twoDP"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:spanCount="2"
             tools:listitem="@layout/photo_item" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
+
+<!-- app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
+<!--    app:spanCount="2"-->

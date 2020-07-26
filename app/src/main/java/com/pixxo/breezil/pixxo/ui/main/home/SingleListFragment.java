@@ -25,6 +25,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSingleListBinding;
@@ -70,9 +72,9 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_single_list, container, false);
 
     viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
-    ((AppCompatActivity) getActivity()).setSupportActionBar(binding.toolbar);
-    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getCategory());
-    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.toolbar);
+    ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getCategory());
+    ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     setUpAdapter();
     setUpViewModel();
     setHasOptionsMenu(true);
@@ -82,11 +84,12 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
   }
 
   private void setUpAdapter() {
+
+
     PhotoClickListener photoClickListener =
         photo -> {
-          SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo);
-          getActivity()
-              .getSupportFragmentManager()
+          SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo, FIRST_TYPE);
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
@@ -94,6 +97,7 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
                   R.anim.fragment_pop_slide_in,
                   R.anim.fragment_pop_slide_out)
               .replace(R.id.parent_container, fragment)
+//              .hide(this)
               .addToBackStack("fragment")
               .commit();
         };
@@ -101,7 +105,7 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
         photo -> {
           ActionBottomSheetFragment actionBottomSheetFragment =
               ActionBottomSheetFragment.getPhoto(photo, FIRST_TYPE);
-          actionBottomSheetFragment.show(getFragmentManager(), getString(R.string.do_something));
+          actionBottomSheetFragment.show(requireActivity().getSupportFragmentManager(), getString(R.string.do_something));
         };
     photoRecyclerViewAdapter =
         new PhotoRecyclerViewAdapter(getContext(), photoClickListener, photoLongClickListener);
@@ -170,7 +174,7 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == android.R.id.home) {
-      getActivity().onBackPressed();
+      requireActivity().onBackPressed();
       return true;
     }
     return false;

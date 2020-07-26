@@ -71,7 +71,7 @@ public class EditingToolsAdapter extends RecyclerView.Adapter<EditingToolsAdapte
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     ToolModel item = mToolList.get(position);
-    holder.txtTool.setText(item.mToolName);
+//    holder.txtTool.setText(item.mToolName);
     holder.imgToolIcon.setImageResource(item.mToolIcon);
   }
 
@@ -87,7 +87,7 @@ public class EditingToolsAdapter extends RecyclerView.Adapter<EditingToolsAdapte
     ViewHolder(View itemView) {
       super(itemView);
       imgToolIcon = itemView.findViewById(R.id.imgToolIcon);
-      txtTool = itemView.findViewById(R.id.txtTool);
+//      txtTool = itemView.findViewById(R.id.txtTool);
       itemView.setOnClickListener(
           new View.OnClickListener() {
             @Override

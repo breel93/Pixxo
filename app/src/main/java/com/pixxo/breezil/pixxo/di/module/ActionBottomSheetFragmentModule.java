@@ -18,7 +18,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public abstract class ActionBottomSheetFragmentModule {
+public abstract class  ActionBottomSheetFragmentModule {
   @ContributesAndroidInjector
   abstract ActionBottomSheetFragment contributeActionBottomSheetFragment();
 }

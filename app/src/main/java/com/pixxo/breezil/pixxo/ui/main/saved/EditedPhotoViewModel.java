@@ -15,21 +15,33 @@ package com.pixxo.breezil.pixxo.ui.main.saved;
 
 import android.content.Context;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.pixxo.breezil.pixxo.model.EditedPhoto;
+import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.repository.EditedPhotoRepository;
+
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
 public class EditedPhotoViewModel extends ViewModel {
   private EditedPhotoRepository editedPhotoRepository;
+  public MutableLiveData<Boolean> hasBeenDeleted = new MutableLiveData<>();
 
   @Inject
   public EditedPhotoViewModel(EditedPhotoRepository editedPhotoRepository) {
     this.editedPhotoRepository = editedPhotoRepository;
   }
 
-  public LiveData<List<EditedPhoto>> getEditedPhotos(Context context, String path) {
-    return editedPhotoRepository.getEditedPhotos(context, path);
+  public LiveData<List<EditedPhoto>> getEditedPhotos(Context context) {
+    return editedPhotoRepository.getEditedPhotos(context);
+  }
+  public void deletePhoto(EditedPhoto photo){
+    File file = new File(photo.getPath());
+    if (file.exists()) {
+      file.delete();
+      hasBeenDeleted.postValue(true);
+    }
   }
 }

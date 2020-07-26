@@ -31,11 +31,11 @@ import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.FileProvider;
@@ -43,16 +43,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+
 import com.pixxo.photoeditor.base.BaseActivity;
 import com.pixxo.photoeditor.filters.FilterListener;
 import com.pixxo.photoeditor.filters.FilterViewAdapter;
 import com.pixxo.photoeditor.tools.EditingToolsAdapter;
 import com.pixxo.photoeditor.tools.ToolType;
+
+import java.io.File;
+import java.io.IOException;
+
 import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
@@ -60,24 +60,21 @@ import ja.burhanrashid52.photoeditor.PhotoFilter;
 import ja.burhanrashid52.photoeditor.SaveSettings;
 import ja.burhanrashid52.photoeditor.TextStyleBuilder;
 import ja.burhanrashid52.photoeditor.ViewType;
-import java.io.File;
-import java.io.IOException;
 
 public class EditImageActivity extends BaseActivity
     implements OnPhotoEditorListener,
-        View.OnClickListener,
-        PropertiesBSFragment.Properties,
-        EmojiBSFragment.EmojiListener,
-        StickerBSFragment.StickerListener,
-        EditingToolsAdapter.OnItemSelected,
-        FilterListener {
+    View.OnClickListener,
+    PropertiesBSFragment.Properties,
+    EmojiBSFragment.EmojiListener,
+    StickerBSFragment.StickerListener,
+    EditingToolsAdapter.OnItemSelected,
+    FilterListener {
 
   public static final String FILE_PROVIDER_AUTHORITY =
       "com.burhanrashid52.photoeditor.fileprovider";
   private static final String TAG = EditImageActivity.class.getSimpleName();
   public static final String EXTRA_IMAGE_PATHS = "extra_image_paths";
   public static String EDIT_IMAGE_URI_STRING = "edit_uri_string";
-  public static String EDITED_IMAGE_URI_STRING = "edited_uri_string";
   private static final int CAMERA_REQUEST = 1;
   private static final int PICK_REQUEST = 2;
   PhotoEditor mPhotoEditor;
@@ -93,28 +90,20 @@ public class EditImageActivity extends BaseActivity
   private ConstraintLayout mRootView;
   private ConstraintSet mConstraintSet = new ConstraintSet();
   private boolean mIsFilterVisible;
-  public static String SINGLE_PHOTO = "single_photo";
-  public String photoString;
-  public String galleryCameraString;
-  private Toolbar mToolbar;
   Uri uri;
   String savedImagePath = null;
 
-  @Nullable @VisibleForTesting Uri mSaveImageUri;
+  @Nullable
+  @VisibleForTesting
+  Uri mSaveImageUri;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     makeFullScreen();
     setContentView(R.layout.activity_edit_image);
-    if (getIntent().hasExtra(SINGLE_PHOTO)) {
-      photoString = getIntent().getStringExtra(SINGLE_PHOTO);
-    } else if (getIntent().hasExtra(EDIT_IMAGE_URI_STRING)) {
-      galleryCameraString = getIntent().getStringExtra(EDIT_IMAGE_URI_STRING);
+    if (getIntent().hasExtra(EDIT_IMAGE_URI_STRING)) {
       uri = Uri.parse(getIntent().getStringExtra(EDIT_IMAGE_URI_STRING));
-    } else if (getIntent().hasExtra(EDITED_IMAGE_URI_STRING)) {
-
-      //      uri = Uri.fromFile(new File(getIntent().getStringExtra(EDITED_IMAGE_URI_STRING)));
     } else {
       finish();
       return;
@@ -142,21 +131,6 @@ public class EditImageActivity extends BaseActivity
         new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
     mRvFilters.setLayoutManager(llmFilters);
     mRvFilters.setAdapter(mFilterViewAdapter);
-
-    mToolbar = findViewById(R.id.pixxoToolBar);
-    setSupportActionBar(mToolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setTitle(R.string.edit_image);
-    mToolbar.setTitle(R.string.edit_image);
-    mToolbar.setNavigationOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            onBackPressed();
-          }
-        });
-    // Typeface mTextRobotoTf = ResourcesCompat.getFont(this, R.font.roboto_medium);
-    // Typeface mEmojiTypeFace = Typeface.createFromAsset(getAssets(), "emojione-android.ttf");
 
     mPhotoEditor =
         new PhotoEditor.Builder(this, mPhotoEditorView)
@@ -187,11 +161,10 @@ public class EditImageActivity extends BaseActivity
   private void initViews() {
     ImageView imgUndo;
     ImageView imgRedo;
-    ImageView imgCamera;
-    ImageView imgGallery;
     ImageView imgSave;
     ImageView imgClose;
     ImageView imgShare;
+    ImageView imgBack;
 
     mPhotoEditorView = findViewById(R.id.photoEditorView);
     mTxtCurrentTool = findViewById(R.id.txtCurrentTool);
@@ -205,11 +178,6 @@ public class EditImageActivity extends BaseActivity
     imgRedo = findViewById(R.id.imgRedo);
     imgRedo.setOnClickListener(this);
 
-    imgCamera = findViewById(R.id.imgCamera);
-    imgCamera.setOnClickListener(this);
-
-    imgGallery = findViewById(R.id.imgGallery);
-    imgGallery.setOnClickListener(this);
 
     imgSave = findViewById(R.id.imgSave);
     imgSave.setOnClickListener(this);
@@ -220,34 +188,8 @@ public class EditImageActivity extends BaseActivity
     imgShare = findViewById(R.id.imgShare);
     imgShare.setOnClickListener(this);
 
-    if (photoString != null) {
-      Glide.with(this)
-          .asBitmap()
-          .load(photoString)
-          .listener(
-              new RequestListener<Bitmap>() {
-                @Override
-                public boolean onLoadFailed(
-                    @Nullable GlideException e,
-                    Object model,
-                    Target<Bitmap> target,
-                    boolean isFirstResource) {
-                  return false;
-                }
-
-                @Override
-                public boolean onResourceReady(
-                    Bitmap bitmap,
-                    Object model,
-                    Target<Bitmap> target,
-                    DataSource dataSource,
-                    boolean isFirstResource) {
-                  mPhotoEditorView.getSource().setImageBitmap(bitmap);
-                  return true;
-                }
-              })
-          .submit();
-    }
+    imgBack = findViewById(R.id.imgBack);
+    imgBack.setOnClickListener(this);
 
     if (EDIT_IMAGE_URI_STRING != null) {
       mPhotoEditorView.getSource().setImageURI(uri);
@@ -316,15 +258,8 @@ public class EditImageActivity extends BaseActivity
       onBackPressed();
     } else if (id == R.id.imgShare) {
       shareImage();
-    } else if (id == R.id.imgCamera) {
-      Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      startActivityForResult(cameraIntent, CAMERA_REQUEST);
-    } else if (id == R.id.imgGallery) {
-      Intent intent = new Intent();
-      intent.setType(getString(R.string.image_));
-      intent.setAction(Intent.ACTION_GET_CONTENT);
-      startActivityForResult(
-          Intent.createChooser(intent, getString(R.string.select_picture)), PICK_REQUEST);
+    }else if(id == R.id.imgBack){
+      goBack();
     }
   }
 
@@ -581,6 +516,14 @@ public class EditImageActivity extends BaseActivity
     } else if (!mPhotoEditor.isCacheEmpty()) {
       showSaveDialog();
     } else {
+      super.onBackPressed();
+    }
+  }
+
+  private void goBack(){
+    if (!mPhotoEditor.isCacheEmpty()) {
+      showSaveDialog();
+    }else {
       super.onBackPressed();
     }
   }

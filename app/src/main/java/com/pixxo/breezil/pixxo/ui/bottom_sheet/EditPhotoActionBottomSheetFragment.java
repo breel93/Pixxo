@@ -13,7 +13,9 @@
  */
 package com.pixxo.breezil.pixxo.ui.bottom_sheet;
 
+import static android.app.Activity.RESULT_OK;
 import static com.pixxo.breezil.pixxo.utils.Constant.EDITED_IMAGE_URI_STRING;
+import static com.pixxo.breezil.pixxo.utils.Constant.EDIT_IMAGE_URI_STRING;
 import static com.pixxo.breezil.pixxo.utils.Constant.SINGLE_PHOTO;
 
 import android.content.Context;
@@ -22,22 +24,42 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentEditPhotoActionBottomSheetBinding;
 import com.pixxo.breezil.pixxo.model.EditedPhoto;
+import com.pixxo.breezil.pixxo.ui.ImageSaveUtils;
+import com.pixxo.breezil.pixxo.ui.main.saved.EditedPhotoViewModel;
+import com.pixxo.breezil.pixxo.ui.main.saved.SavedPhotosViewModel;
 import com.pixxo.photoeditor.EditImageActivity;
+import com.theartofdev.edmodo.cropper.CropImage;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
+
 /** A simple {@link Fragment} subclass. */
 public class EditPhotoActionBottomSheetFragment extends BottomSheetDialogFragment {
+
   private FragmentEditPhotoActionBottomSheetBinding binding;
+  private EditedPhotoViewModel viewModel;
+
+  @Inject
+  ViewModelProvider.Factory viewModelFactory;
 
   public static EditPhotoActionBottomSheetFragment getPhoto(EditedPhoto photo) {
     EditPhotoActionBottomSheetFragment fragment = new EditPhotoActionBottomSheetFragment();
@@ -46,6 +68,7 @@ public class EditPhotoActionBottomSheetFragment extends BottomSheetDialogFragmen
     fragment.setArguments(args);
     return fragment;
   }
+
 
   public EditPhotoActionBottomSheetFragment() {
     // Required empty public constructor
@@ -58,41 +81,25 @@ public class EditPhotoActionBottomSheetFragment extends BottomSheetDialogFragmen
     binding =
         DataBindingUtil.inflate(
             inflater, R.layout.fragment_edit_photo_action_bottom_sheet, container, false);
+    viewModel = new ViewModelProvider(this, viewModelFactory).get(EditedPhotoViewModel.class);
     updateUi(getPhoto());
-    //    Toast.makeText(getContext(), String.valueOf(getPhoto().getPath()),
-    // Toast.LENGTH_LONG).show();
     return binding.getRoot();
   }
 
+  @Override
+  public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
+    AndroidSupportInjection.inject(this);
+  }
+
   private void updateUi(EditedPhoto photo) {
-    edit(photo);
     share(photo);
-    delete(photo);
-  }
-
-  private void delete(EditedPhoto photo) {
-    binding.selectDelete.setOnClickListener(
-        v -> {
-          File file = new File(photo.getPath());
-          if (file.exists()) {
-            file.delete();
-          }
-        });
-  }
-
-  private void edit(EditedPhoto photo) {
-    binding.selectEdit.setOnClickListener(
-        v -> {
-          Intent editIntent = new Intent(getContext(), EditImageActivity.class);
-          editIntent.putExtra(EDITED_IMAGE_URI_STRING, String.valueOf(photo.getPath()));
-          getContext().startActivity(editIntent);
-        });
   }
 
   private void share(EditedPhoto photo) {
     binding.selectShare.setOnClickListener(
         v -> {
-          Uri uri = getImageUri(getContext(), photo.getImage());
+          Uri uri = getImageUri(requireContext(), photo.getImage());
           startSharing(uri);
         });
   }
@@ -112,12 +119,13 @@ public class EditPhotoActionBottomSheetFragment extends BottomSheetDialogFragmen
     startActivity(Intent.createChooser(shareIntent, getString(R.string.share_image)));
   }
 
-  public Uri getImageUri(Context inContext, Bitmap inImage) {
+  public Uri getImageUri(Context context, Bitmap inImage) {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
     String path =
         MediaStore.Images.Media.insertImage(
-            inContext.getContentResolver(), inImage, getString(R.string.title), null);
+            context.getContentResolver(), inImage, getString(R.string.title), null);
     return Uri.parse(path);
   }
+
 }

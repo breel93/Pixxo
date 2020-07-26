@@ -23,10 +23,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.pixxo.breezil.pixxo.R;
@@ -63,15 +66,16 @@ public class EditPhotoFragment extends DaggerFragment {
     // Inflate the layout for this fragment
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_photo, container, false);
     viewModel = new ViewModelProvider(this, viewModelFactory).get(EditedPhotoViewModel.class);
-    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+    if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
         == PackageManager.PERMISSION_GRANTED) {
       if (PIXXO_EDITED != null) {
         setGridAdapter();
         updateViewModel();
+        refreshFragment();
       }
     } else {
       ActivityCompat.requestPermissions(
-          getActivity(),
+          requireActivity(),
           new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
           STORAGE_PERMISSION_CODE);
     }
@@ -79,18 +83,18 @@ public class EditPhotoFragment extends DaggerFragment {
   }
 
   private void setGridAdapter() {
+    SaveAndEditFragment saveAndEditFragment = new SaveAndEditFragment();
     EditedPhotoClickListener photoClickListener =
         editedPhoto -> {
           SingleEditedPhotoFragment fragment = SingleEditedPhotoFragment.getPhoto(editedPhoto);
-          getFragmentManager()
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
-                  R.anim.fragment_slide_out,
-                  R.anim.fragment_pop_slide_in,
-                  R.anim.fragment_pop_slide_out)
+                  R.anim.fragment_slide_out)
               .add(R.id.parent_container, fragment)
               .hide(this)
+              .hide(saveAndEditFragment)
               .addToBackStack("fragment")
               .commit();
         };
@@ -98,7 +102,7 @@ public class EditPhotoFragment extends DaggerFragment {
         editedPhoto -> {
           EditPhotoActionBottomSheetFragment fragment =
               EditPhotoActionBottomSheetFragment.getPhoto(editedPhoto);
-          fragment.show(getFragmentManager(), getString(R.string.do_something));
+          fragment.show(requireActivity().getSupportFragmentManager(), getString(R.string.do_something));
         };
     adapter = new EditPhotoRecyclerAdapter(photoClickListener, photoLongClickListener);
     StaggeredGridLayoutManager staggeredGridLayoutManager =
@@ -108,7 +112,7 @@ public class EditPhotoFragment extends DaggerFragment {
 
   private void updateViewModel() {
     viewModel
-        .getEditedPhotos(getContext(), PIXXO_EDITED)
+        .getEditedPhotos(requireContext())
         .observe(
             getViewLifecycleOwner(),
             editedPhotos -> {
@@ -116,14 +120,25 @@ public class EditPhotoFragment extends DaggerFragment {
                 binding.editedPhotoRecyclerView.setAdapter(adapter);
                 Collections.reverse(editedPhotos);
                 adapter.submitList(editedPhotos);
+                adapter.notifyDataSetChanged();
               } else {
                 binding.emptyText.setVisibility(View.VISIBLE);
                 binding.clickToEditbtn.setVisibility(View.VISIBLE);
                 binding.clickToEditbtn.setOnClickListener(
                     v ->
                         choosePhotoBottomDialogFragment.show(
-                            getFragmentManager(), getString(R.string.choose_image)));
+                            requireActivity().getSupportFragmentManager(), getString(R.string.choose_image)));
               }
             });
   }
+
+  private void refreshFragment(){
+    viewModel.hasBeenDeleted.observe(getViewLifecycleOwner(), deleted->{
+      if(deleted){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+      }
+    });
+  }
+
 }

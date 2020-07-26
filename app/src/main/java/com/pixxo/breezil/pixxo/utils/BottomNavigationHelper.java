@@ -22,13 +22,11 @@ import java.lang.reflect.Field;
 import timber.log.Timber;
 
 public class BottomNavigationHelper {
-  private static String UNABLE_TO_GET_SHIFT = "Unable to get shift mode field";
-  private static String UNABLE_TO_CHANGE_VALUE = "Unable to change value of shift mode";
-  private static String SHIFTING_MODE = "mShiftingMode";
 
   public static void disableShiftMode(BottomNavigationView view) {
     BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(ZERO);
     try {
+      String SHIFTING_MODE = "mShiftingMode";
       Field shiftingMode = menuView.getClass().getDeclaredField(SHIFTING_MODE);
       shiftingMode.setAccessible(true);
       shiftingMode.setBoolean(menuView, false);
@@ -44,8 +42,10 @@ public class BottomNavigationHelper {
         item.setChecked(item.getItemData().isChecked());
       }
     } catch (NoSuchFieldException e) {
+      String UNABLE_TO_GET_SHIFT = "Unable to get shift mode field";
       Timber.e(e, UNABLE_TO_GET_SHIFT);
     } catch (IllegalAccessException e) {
+      String UNABLE_TO_CHANGE_VALUE = "Unable to change value of shift mode";
       Timber.e(e, UNABLE_TO_CHANGE_VALUE);
     }
   }

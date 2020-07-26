@@ -51,6 +51,6 @@ public class SettingsFragment extends DaggerFragment {
   }
 
   private void goBack() {
-    binding.backPressed.setOnClickListener(v -> getFragmentManager().popBackStack());
+    binding.backPressed.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
   }
 }

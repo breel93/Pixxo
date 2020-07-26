@@ -69,12 +69,12 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
     binding.selectGallery.setOnClickListener(
         v -> {
           if (ContextCompat.checkSelfPermission(
-                  getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                  requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
               == PackageManager.PERMISSION_GRANTED) {
             gotoGallery();
           } else {
             ActivityCompat.requestPermissions(
-                getActivity(),
+                requireActivity(),
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
                 STORAGE_PERMISSION_CODE);
           }
@@ -83,13 +83,13 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
     binding.selectCamera.setOnClickListener(
         v -> {
           if (ContextCompat.checkSelfPermission(
-                  getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                  requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
               == PackageManager.PERMISSION_GRANTED) {
             gotoCamera();
           }
           {
             ActivityCompat.requestPermissions(
-                getActivity(),
+                requireActivity(),
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
                 CAMERA_PERMISSION_CODE);
           }
@@ -104,13 +104,13 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
       if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         gotoGallery();
       } else {
-        Toast.makeText(getActivity(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
       }
     } else if (requestCode == CAMERA_PERMISSION_CODE) {
       if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         gotoCamera();
       } else {
-        Toast.makeText(getActivity(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
       }
     }
   }
@@ -118,7 +118,7 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
   private void gotoCamera() {
     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     // Ensure that there's a camera activity to handle the intent
-    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+    if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
       // Create the File where the photo should go
       File photoFile;
       try {
@@ -132,8 +132,8 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
       if (photoFile != null) {
         mCameraURI =
             FileProvider.getUriForFile(
-                getActivity(),
-                getActivity().getPackageName() + getString(R.string._provider),
+                requireActivity(),
+                requireActivity().getPackageName() + getString(R.string._provider),
                 photoFile);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraURI);
         startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
@@ -146,7 +146,7 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
     galleryIntent.setType(getString(R.string.images_slash));
     galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-    if (galleryIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+    if (galleryIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
       startActivityForResult(
           Intent.createChooser(galleryIntent, getString(R.string.choose_image)),
           GALLERY_REQUEST_CODE);
@@ -161,7 +161,7 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
 
       try {
         Uri photoUri = data.getData();
-        CropImage.activity(photoUri).start(getContext(), this);
+        CropImage.activity(photoUri).start(requireContext(), this);
 
       } catch (Exception e) {
         e.printStackTrace();
@@ -169,7 +169,7 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
     } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
       if (mCameraURI != null) {
         Uri cameraUri = mCameraURI;
-        CropImage.activity(cameraUri).start(getContext(), this);
+        CropImage.activity(cameraUri).start(requireContext(), this);
       }
     }
     // copied from Aurthur Edmondo github for crop action
@@ -190,7 +190,7 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
     // Create an image file name
     String timeStamp = new SimpleDateFormat(getString(R.string.date_format)).format(new Date());
     String imageFileName = getString(R.string.jpeg_) + timeStamp + getString(R.string.underscore);
-    File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    File storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
     File image =
         File.createTempFile(
             imageFileName, /* prefix */
@@ -199,4 +199,5 @@ public class ChoosePhotoBottomDialogFragment extends BottomSheetDialogFragment {
     mCurrentPhotoPath = image.getAbsolutePath();
     return image;
   }
+
 }

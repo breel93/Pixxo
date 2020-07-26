@@ -25,11 +25,15 @@ import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSaveAndEditBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.SavedPagerAdapter;
 import com.pixxo.breezil.pixxo.ui.settings.SettingsFragment;
+import com.pixxo.breezil.pixxo.utils.helper.FadeOutTransformation;
+
 import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
+
 import java.lang.reflect.Field;
 
 /** A simple {@link Fragment} subclass. */
-public class SaveAndEditFragment extends Fragment {
+public class SaveAndEditFragment extends DaggerFragment {
 
   private FragmentSaveAndEditBinding binding;
 
@@ -39,7 +43,6 @@ public class SaveAndEditFragment extends Fragment {
 
   @Override
   public void onAttach(@NonNull Context context) {
-    AndroidSupportInjection.inject(this);
     super.onAttach(context);
   }
 
@@ -60,6 +63,8 @@ public class SaveAndEditFragment extends Fragment {
     binding.container.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.container);
     binding.container.setCurrentItem(0, false);
+    binding.container.setPageTransformer(false, new FadeOutTransformation());
+
   }
 
   @Override
@@ -80,7 +85,7 @@ public class SaveAndEditFragment extends Fragment {
     binding.gotoPreference.setOnClickListener(
         v -> {
           SettingsFragment fragment = new SettingsFragment();
-          getFragmentManager()
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
@@ -93,4 +98,5 @@ public class SaveAndEditFragment extends Fragment {
               .commit();
         });
   }
+
 }

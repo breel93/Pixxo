@@ -13,6 +13,7 @@
  */
 package com.pixxo.breezil.pixxo.ui;
 
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,9 +23,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+
 import com.pixxo.breezil.pixxo.R;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,50 +36,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
 
+import id.zelory.compressor.Compressor;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 public class ImageSaveUtils {
   Context context;
 
   public ImageSaveUtils(Context context) {
     this.context = context;
-  }
-
-  public void startDownloading(Context context, Bitmap bitmap, String directory) {
-    File storageDir =
-        new File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                + directory);
-    if (Build.VERSION.SDK_INT >= 29) {
-      ContentValues values = this.contentValues();
-      values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/" + directory);
-      values.put(MediaStore.Images.Media.IS_PENDING, true);
-      Uri uri =
-          context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-      if (uri != null) {
-        try {
-          this.saveImageToStream(bitmap, context.getContentResolver().openOutputStream(uri));
-        } catch (FileNotFoundException e) {
-          e.printStackTrace();
-        }
-        context.getContentResolver().update(uri, values, null, null);
-      }
-    } else {
-
-      if (!storageDir.exists()) {
-        storageDir.mkdirs();
-      }
-      String fileName = System.currentTimeMillis() + ".png";
-      File file = new File(storageDir, fileName);
-      try {
-        this.saveImageToStream(bitmap, (new FileOutputStream(file)));
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      }
-      if (file.getAbsolutePath() != null) {
-        ContentValues values = this.contentValues();
-        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-      }
-    }
   }
 
   public Uri getLocalBitmapUri(Bitmap bmp, Context context) {
@@ -102,39 +72,46 @@ public class ImageSaveUtils {
     return bmpUri;
   }
 
-  private ContentValues contentValues() {
-    ContentValues values = new ContentValues();
-    values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-    values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / (long) 1000);
-    values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-    return values;
-  }
 
-  public void saveImage(Context context, Bitmap bitmap, @NonNull String name) {
+  public void saveImage(Context context, Bitmap bitmap, @NonNull String directory) {
     OutputStream fos = null;
+    File storageDir =
+        new File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + directory);
+    String fileName = "Pixxo" + System.currentTimeMillis() + ".png";
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       ContentResolver resolver = context.getContentResolver();
       ContentValues contentValues = new ContentValues();
-      contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name + ".pnd");
+      contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
       contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
-      contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+      contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + directory);
       Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
       try {
         fos = resolver.openOutputStream(Objects.requireNonNull(imageUri));
       } catch (FileNotFoundException e) {
         e.printStackTrace();
       }
+      saveImageToStream(bitmap, fos);
     } else {
-      String imagesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
-      File image = new File(imagesDir, name + ".png");
+      if (!storageDir.exists()) {
+        storageDir.mkdirs();
+      }
+      File file = new File(storageDir, fileName);
       try {
-        fos = new FileOutputStream(image);
+        this.saveImageToStream(bitmap, (new FileOutputStream(file)));
       } catch (FileNotFoundException e) {
         e.printStackTrace();
       }
+      if (file.getAbsolutePath() != null) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+      }
     }
-    saveImageToStream(bitmap, fos);
   }
+
 
   private void saveImageToStream(Bitmap bitmap, OutputStream outputStream) {
     if (outputStream != null) {
@@ -155,94 +132,27 @@ public class ImageSaveUtils {
     context.sendBroadcast(mediaScanIntent);
   }
 
-  //   public String startDownloading(Context context, Bitmap image) {
-  //    String savedImagePath = null;
-  //    // Create the new file in the external storage
-  //    String timeStamp =
-  //        new SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
-  //            .format(new Date());
-  //    String imageFileName =
-  //        context.getString(R.string.app_name) + timeStamp + context.getString(R.string.png);
-  ////    File storageDir =
-  ////        new File(
-  ////            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-  ////                + context.getString(R.string._slash_pixxo));
-  //    File storageDir =
-  //        new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+
-  //            context.getString(R.string._slash_pixxo));
-  //    boolean success = true;
-  //    if (!storageDir.exists()) {
-  //      success = storageDir.mkdirs();
-  //    }
-  //
-  //    // Save the new Bitmap
-  //    if (success) {
-  //      File imageFile = new File(storageDir, imageFileName);
-  //      savedImagePath = imageFile.getAbsolutePath();
-  //      try {
-  //        OutputStream fileOut = new FileOutputStream(imageFile);
-  //        image.compress(Bitmap.CompressFormat.JPEG, 100, fileOut);
-  //        fileOut.close();
-  //      } catch (Exception e) {
-  //        e.printStackTrace();
-  //      }
-  //
-  //      // Add the image to the system gallery
-  //      galleryAddPic(context, savedImagePath);
-  //    }
-  //
-  //    return savedImagePath;
-  //  }
+  public File getCompressFile(Uri uri, Context context){
+    File actualImage = new File(uri.getPath());
+//    new Compressor(context)
+//        .compressToFileAsFlowable(actualImage)
+//        .subscribeOn(Schedulers.io())
+//        .observeOn(AndroidSchedulers.mainThread())
+//        .subscribe(file -> newFile = file, throwable -> throwable.printStackTrace());
+//    return newFile;
+    try {
+      File compressedImage = new Compressor(context)
+          .setMaxWidth(640)
+          .setMaxHeight(480)
+          .setQuality(75)
+          .setCompressFormat(Bitmap.CompressFormat.WEBP)
+          .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+              Environment.DIRECTORY_PICTURES).getAbsolutePath())
+          .compressToFile(actualImage);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return actualImage;
+  }
 
-  //  public String startDownloading(Context context, Bitmap image) {
-  //    String savedImagePath = null;
-  //    File storageDir =
-  //        new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+
-  //            context.getString(R.string._slash_pixxo));
-  //
-  //    if (Build.VERSION.SDK_INT >= 29) {
-  //      ContentValues values = this.contentValues();
-  //      values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/" +
-  // context.getString(R.string._slash_pixxo));
-  //      values.put(MediaStore.Images.Media.IS_PENDING, true);
-  //      Uri uri =
-  // context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-  //      if (uri != null) {
-  //        try {
-  //          this.saveImageToStream(image, context.getContentResolver().openOutputStream(uri));
-  //        } catch (FileNotFoundException e) {
-  //          e.printStackTrace();
-  //        }
-  //        context.getContentResolver().update(uri, values, null, null);
-  //      }
-  //    } else {
-  //      String timeStamp =
-  //          new SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
-  //              .format(new Date());
-  //      String imageFileName =
-  //          context.getString(R.string.app_name) + timeStamp + context.getString(R.string.png);
-  //
-  //      boolean success = true;
-  //      if (!storageDir.exists()) {
-  //        success = storageDir.mkdirs();
-  //      }
-  //
-  //      // Save the new Bitmap
-  //      if (success) {
-  //        File imageFile = new File(storageDir, imageFileName);
-  //        savedImagePath = imageFile.getAbsolutePath();
-  //        try {
-  //          OutputStream fileOut = new FileOutputStream(imageFile);
-  //          image.compress(Bitmap.CompressFormat.PNG, 100, fileOut);
-  //          fileOut.close();
-  //        } catch (Exception e) {
-  //          e.printStackTrace();
-  //        }
-  //      }
-  //      // Add the image to the system gallery
-  //      galleryAddPic(context, savedImagePath);
-  //    }
-  //
-  //    return savedImagePath;
-  //  }
 }

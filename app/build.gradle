@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply from: '../dependencies.gradle'
 
-
 android {
 
     signingConfigs {
@@ -121,10 +120,14 @@ dependencies {
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:' + versions.image_cropper
 
+    implementation 'id.zelory:compressor:2.1.0'
+
     implementation 'com.an.customfontview:customfont:' + versions.customfont
 
     //PhotoEditor
     implementation 'ja.burhanrashid52:photoeditor:' + versions.photoeditor
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //photo editor library
     implementation project(':photoeditor')
@@ -167,10 +170,8 @@ dependencies {
 
     testImplementation 'androidx.test:rules:1.2.0'
     testImplementation 'androidx.test.ext:junit:1.1.1'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.3.1'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.8.0'
 
-
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.3.1'
     testImplementation 'org.robolectric:robolectric:' + versions.robolectric
     testImplementation 'org.powermock:powermock-core:' + versions.powerMock
     testImplementation 'org.powermock:powermock-module-junit4:' + versions.powerMockModuleJunit4

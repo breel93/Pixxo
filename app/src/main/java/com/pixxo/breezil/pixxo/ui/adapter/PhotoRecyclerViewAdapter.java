@@ -93,11 +93,7 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
   }
 
   private boolean hasExtraRow() {
-    if (networkState != null && networkState != NetworkState.LOADED) {
-      return true;
-    } else {
-      return false;
-    }
+    return networkState != null && networkState != NetworkState.LOADED;
   }
 
   @Override

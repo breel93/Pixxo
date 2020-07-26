@@ -16,16 +16,19 @@ package com.pixxo.breezil.pixxo.model;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.net.Uri;
 
 public class EditedPhoto implements Parcelable {
   private String path;
   private boolean isDirectory;
   private Bitmap image;
+  private Uri uri;
 
-  public EditedPhoto(String path, boolean isDirectory, Bitmap image) {
+  public EditedPhoto(String path, boolean isDirectory, Bitmap image, Uri uri) {
     this.path = path;
     this.isDirectory = isDirectory;
     this.image = image;
+    this.uri = uri;
   }
 
   public EditedPhoto() {}
@@ -34,6 +37,7 @@ public class EditedPhoto implements Parcelable {
     path = in.readString();
     isDirectory = in.readByte() != 0;
     image = in.readParcelable(Bitmap.class.getClassLoader());
+    uri = in.readParcelable(Uri.class.getClassLoader());
   }
 
   public static final Creator<EditedPhoto> CREATOR =
@@ -73,6 +77,14 @@ public class EditedPhoto implements Parcelable {
     this.image = image;
   }
 
+  public Uri getUri() {
+    return uri;
+  }
+
+  public void setUri(Uri uri) {
+    this.uri = uri;
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -83,5 +95,6 @@ public class EditedPhoto implements Parcelable {
     dest.writeString(path);
     dest.writeByte((byte) (isDirectory ? 1 : 0));
     dest.writeParcelable(image, flags);
+    dest.writeParcelable(uri, flags);
   }
 }

@@ -15,6 +15,7 @@ package com.pixxo.breezil.pixxo.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -23,12 +24,16 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.MediaStoreSignature;
 import com.pixxo.breezil.pixxo.R;
+import com.pixxo.breezil.pixxo.databinding.PhotoItemBinding;
 import com.pixxo.breezil.pixxo.databinding.PhotoViewItemBinding;
 import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoLongClickListener;
+import com.squareup.picasso.Picasso;
 
 public class SavedPhotoRecyclerAdapter
     extends ListAdapter<Photo, SavedPhotoRecyclerAdapter.SavedImageHolder> {
@@ -51,7 +56,7 @@ public class SavedPhotoRecyclerAdapter
       new DiffUtil.ItemCallback<Photo>() {
         @Override
         public boolean areItemsTheSame(@NonNull Photo oldItem, @NonNull Photo newItem) {
-          return oldItem.getRoomId() == newItem.getRoomId();
+          return oldItem.getWebformatURL().equals(newItem.getWebformatURL());
         }
 
         @SuppressLint("DiffUtilEquals")
@@ -75,7 +80,25 @@ public class SavedPhotoRecyclerAdapter
     savedImageHolder.bind(photo, savedPhotoClickListener, savedPhotoLongClickListener);
   }
 
+//  @Override
+//  public void onViewRecycled(@NonNull SavedImageHolder holder) {
+//    super.onViewRecycled(holder);
+//    Glide.with(context).load(R.drawable.placeholder).into(binding.photoItem);
+//
+//  }
+
+  @Override
+  public long getItemId(int position) {
+    return position;
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    return position;
+  }
+
   class SavedImageHolder extends RecyclerView.ViewHolder {
+    private boolean clicked = false;
     SavedImageHolder(PhotoViewItemBinding photoItemBinding) {
       super(binding.getRoot());
       binding = photoItemBinding;
@@ -85,7 +108,14 @@ public class SavedPhotoRecyclerAdapter
         Photo photo,
         PhotoClickListener photoClickListener,
         PhotoLongClickListener photoLongClickListener) {
-      itemView.setOnClickListener(v -> photoClickListener.showFullPhoto(photo));
+      itemView.setOnClickListener(v -> {
+        if (!clicked) {
+          clicked = true;
+           photoClickListener.showFullPhoto(photo);
+          Handler clickHandler = new Handler();
+          clickHandler.postDelayed(() -> clicked = false, 1000);
+        }
+      });
       itemView.setOnLongClickListener(
           v -> {
             photoLongClickListener.doSomethingWithPhoto(photo);
@@ -99,11 +129,16 @@ public class SavedPhotoRecyclerAdapter
       circularProgressDrawable.start();
       double width = photo.getWebformatWidth();
       double height = photo.getWebformatHeight() / .75;
+      binding.photoItem.setImageDrawable(null);
+      binding.photoItem.setImageURI(null);
       binding.photoItem.setAspectRatio(height / width);
+      Glide.with(context).clear(binding.photoItem);
       Glide.with(context)
           .load(photo.getWebformatURL())
+          .signature(new MediaStoreSignature("IMAGE",System.currentTimeMillis(),0))
           .apply(
               new RequestOptions()
+                  .skipMemoryCache(true)
                   .placeholder(R.drawable.placeholder)
                   .error(R.drawable.placeholder))
           .into(binding.photoItem);

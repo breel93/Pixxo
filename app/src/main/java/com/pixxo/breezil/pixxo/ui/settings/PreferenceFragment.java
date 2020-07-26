@@ -56,7 +56,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat
     if (!key.equals(getString(R.string.pref_category_key))) {
       updateSummary(findPreference(key));
       updateNightMode(findPreference(key));
-      Objects.requireNonNull(getActivity()).recreate();
+      if(requireActivity() != null){
+        requireActivity().recreate();
+      }
+
     }
   }
 

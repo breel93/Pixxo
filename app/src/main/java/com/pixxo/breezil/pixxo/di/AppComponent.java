@@ -18,9 +18,12 @@ import com.pixxo.breezil.pixxo.Pixxo;
 import com.pixxo.breezil.pixxo.di.module.ActionBottomSheetFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.AppModule;
 import com.pixxo.breezil.pixxo.di.module.BaseActivityModule;
+import com.pixxo.breezil.pixxo.di.module.EditPhotoActionBottomSheetFragmentModule;
 import com.pixxo.breezil.pixxo.di.module.MainActivityModule;
 import com.pixxo.breezil.pixxo.di.module.SplashActivityModule;
 import com.pixxo.breezil.pixxo.di.module.ViewModelModule;
+import com.pixxo.breezil.pixxo.ui.bottom_sheet.EditPhotoActionBottomSheetFragment;
+
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
@@ -36,6 +39,7 @@ import javax.inject.Singleton;
       BaseActivityModule.class,
       SplashActivityModule.class,
       ActionBottomSheetFragmentModule.class,
+      EditPhotoActionBottomSheetFragmentModule.class,
       ViewModelModule.class
     })
 public interface AppComponent extends AndroidInjector<Pixxo> {

@@ -75,16 +75,15 @@ public class MainFragment extends DaggerFragment {
     binding.mainRecyclerView.hasFixedSize();
     PhotoClickListener photoClickListener =
         photo -> {
-          SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo);
-          getFragmentManager()
+          SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo,FIRST_TYPE);
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
-                  R.anim.fragment_slide_out,
-                  R.anim.fragment_pop_slide_in,
-                  R.anim.fragment_pop_slide_out)
+                  R.anim.fragment_slide_out
+                 )
               .add(R.id.parent_container, fragment)
-              .hide(this)
+//              .hide(this)
               .addToBackStack("fragment")
               .commit();
         };
@@ -94,7 +93,7 @@ public class MainFragment extends DaggerFragment {
           ActionBottomSheetFragment actionBottomSheetFragment =
               ActionBottomSheetFragment.getPhoto(photo, FIRST_TYPE);
           actionBottomSheetFragment.show(
-              getChildFragmentManager(), getString(R.string.do_something));
+              requireActivity().getSupportFragmentManager(), getString(R.string.do_something));
         };
 
     StaggeredGridLayoutManager staggeredGridLayoutManager =
@@ -116,9 +115,7 @@ public class MainFragment extends DaggerFragment {
         .getPhotoList()
         .observe(
             getViewLifecycleOwner(),
-            photos -> {
-              adapter.submitList(photos);
-            });
+            photos -> adapter.submitList(photos));
 
     viewModel
         .getNetworkState()
@@ -164,7 +161,7 @@ public class MainFragment extends DaggerFragment {
     QuickSelectListener quickSelectListener =
         string -> {
           SingleListFragment fragment = SingleListFragment.getCategory(string);
-          getFragmentManager()
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
@@ -227,7 +224,7 @@ public class MainFragment extends DaggerFragment {
     binding.gotoPreference.setOnClickListener(
         v -> {
           SettingsFragment fragment = new SettingsFragment();
-          getFragmentManager()
+          requireActivity().getSupportFragmentManager()
               .beginTransaction()
               .setCustomAnimations(
                   R.anim.fragment_slide_in,
