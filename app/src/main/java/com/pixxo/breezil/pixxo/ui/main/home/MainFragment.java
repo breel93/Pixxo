@@ -19,12 +19,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentMainBinding;
 import com.pixxo.breezil.pixxo.ui.adapter.PhotoRecyclerViewAdapter;
@@ -68,10 +71,13 @@ public class MainFragment extends DaggerFragment {
     updateQuickSearch();
     doSearch();
     gotoOptionSelect();
+    binding.swipeRefresh.setOnRefreshListener(this::refresh);
     return binding.getRoot();
   }
 
   private void upDateAdapter() {
+    binding.shimmerViewContainer.startShimmer();
+    binding.shimmerViewContainer.setVisibility(View.VISIBLE);
     binding.mainRecyclerView.hasFixedSize();
     PhotoClickListener photoClickListener =
         photo -> {
@@ -83,7 +89,7 @@ public class MainFragment extends DaggerFragment {
                   R.anim.fragment_slide_out
                  )
               .add(R.id.parent_container, fragment)
-//              .hide(this)
+              .hide(this)
               .addToBackStack("fragment")
               .commit();
         };
@@ -95,10 +101,6 @@ public class MainFragment extends DaggerFragment {
           actionBottomSheetFragment.show(
               requireActivity().getSupportFragmentManager(), getString(R.string.do_something));
         };
-
-    StaggeredGridLayoutManager staggeredGridLayoutManager =
-        new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-    binding.photoRecyclerView.setLayoutManager(staggeredGridLayoutManager);
     adapter =
         new PhotoRecyclerViewAdapter(getActivity(), photoClickListener, photoLongClickListener);
     binding.photoRecyclerView.hasFixedSize();
@@ -106,6 +108,10 @@ public class MainFragment extends DaggerFragment {
   }
 
   private void updateUi() {
+    binding.swipeRefresh.setVisibility(View.VISIBLE);
+    binding.swipeRefresh.setColorSchemeResources(
+        R.color.colorAccent, R.color.colorPrimary, R.color.colorblue, R.color.hotPink);
+
     viewModel.setParameter(
         getString(R.string.blank),
         getString(R.string.blank),
@@ -115,7 +121,10 @@ public class MainFragment extends DaggerFragment {
         .getPhotoList()
         .observe(
             getViewLifecycleOwner(),
-            photos -> adapter.submitList(photos));
+            photos -> {
+                binding.shimmerViewContainer.setVisibility(View.GONE);
+                adapter.submitList(photos);
+            });
 
     viewModel
         .getNetworkState()
@@ -126,6 +135,9 @@ public class MainFragment extends DaggerFragment {
                 adapter.setNetworkState(networkState);
               }
             });
+    if (binding.swipeRefresh != null) {
+      binding.swipeRefresh.setRefreshing(false);
+    }
   }
 
   private void doSearch() {
@@ -188,7 +200,10 @@ public class MainFragment extends DaggerFragment {
         .observe(
             this,
             photos -> {
-              adapter.submitList(photos);
+//              if(!photos.isEmpty()){
+                binding.shimmerViewContainer.setVisibility(View.GONE);
+                adapter.submitList(photos);
+//              }
             });
     viewModel
         .getNetworkState()
@@ -208,7 +223,15 @@ public class MainFragment extends DaggerFragment {
         getString(R.string.en),
         getString(R.string.random));
 
-    viewModel.refreshPhotos().observe(this, photos -> adapter.submitList(photos));
+    viewModel.refreshPhotos().observe(this, photos -> {
+//      if(!photos.isEmpty()){
+        binding.shimmerViewContainer.setVisibility(View.GONE);
+        adapter.submitList(photos);
+//      }
+    });
+    if (binding.swipeRefresh != null) {
+      binding.swipeRefresh.setRefreshing(false);
+    }
     viewModel
         .getNetworkState()
         .observe(

@@ -14,6 +14,8 @@
 package com.pixxo.breezil.pixxo.ui.main;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.transition.Slide;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
@@ -31,21 +34,27 @@ import com.pixxo.breezil.pixxo.databinding.ActivityMainBinding;
 import com.pixxo.breezil.pixxo.ui.BaseActivity;
 import com.pixxo.breezil.pixxo.ui.adapter.PagerAdapter;
 import com.pixxo.breezil.pixxo.ui.bottom_sheet.ChoosePhotoBottomDialogFragment;
+import com.pixxo.breezil.pixxo.ui.callbacks.SinglePhotoFragmentOpenedListener;
 import com.pixxo.breezil.pixxo.ui.main.home.MainFragment;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.SingleEditedPhotoFragment;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
 import com.pixxo.breezil.pixxo.ui.main.saved.SaveAndEditFragment;
+import com.pixxo.breezil.pixxo.ui.settings.PreferenceFragment;
 import com.pixxo.breezil.pixxo.utils.BottomNavigationHelper;
 import com.pixxo.breezil.pixxo.utils.ConnectionUtils;
 import com.pixxo.breezil.pixxo.utils.helper.FadeOutTransformation;
+
+import java.lang.reflect.Field;
+
 import javax.inject.Inject;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
-@SuppressLint("RestrictedApi")
-public class MainActivity extends BaseActivity implements SinglePhotoFragment.SinglePhotoFragmentListener,
-    SingleEditedPhotoFragment.SingleEditedPhotoFragmentListener {
+import static com.mikepenz.iconics.Iconics.getApplicationContext;
 
+@SuppressLint("RestrictedApi")
+public class MainActivity extends BaseActivity implements
+    SinglePhotoFragmentOpenedListener{
   public ActivityMainBinding binding;
   private ChoosePhotoBottomDialogFragment choosePhotoBottomDialogFragment =
       new ChoosePhotoBottomDialogFragment();
@@ -111,10 +120,8 @@ public class MainActivity extends BaseActivity implements SinglePhotoFragment.Si
     Transition transition = new Slide(Gravity.START);
     transition.addTarget(binding.mainContainer);
     TransitionManager.beginDelayedTransition(binding.parentContainer, transition);
-    if(opened){
-      binding.mainContainer.setVisibility(View.GONE);
-    }else{
-      binding.mainContainer.setVisibility(View.VISIBLE);
-    }
+    binding.mainContainer.setVisibility(opened ? View.GONE : View.VISIBLE);
   }
+
+
 }

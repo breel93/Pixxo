@@ -36,11 +36,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
 
-import id.zelory.compressor.Compressor;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-
 public class ImageSaveUtils {
   Context context;
 
@@ -132,27 +127,5 @@ public class ImageSaveUtils {
     context.sendBroadcast(mediaScanIntent);
   }
 
-  public File getCompressFile(Uri uri, Context context){
-    File actualImage = new File(uri.getPath());
-//    new Compressor(context)
-//        .compressToFileAsFlowable(actualImage)
-//        .subscribeOn(Schedulers.io())
-//        .observeOn(AndroidSchedulers.mainThread())
-//        .subscribe(file -> newFile = file, throwable -> throwable.printStackTrace());
-//    return newFile;
-    try {
-      File compressedImage = new Compressor(context)
-          .setMaxWidth(640)
-          .setMaxHeight(480)
-          .setQuality(75)
-          .setCompressFormat(Bitmap.CompressFormat.WEBP)
-          .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-              Environment.DIRECTORY_PICTURES).getAbsolutePath())
-          .compressToFile(actualImage);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return actualImage;
-  }
 
 }

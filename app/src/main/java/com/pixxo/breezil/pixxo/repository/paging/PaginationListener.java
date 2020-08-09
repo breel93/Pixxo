@@ -20,6 +20,7 @@ public interface PaginationListener<Response, Result> {
 
   void onInitialError(Throwable throwable);
 
+
   void onInitialSuccess(
       Response response,
       PageKeyedDataSource.LoadInitialCallback<Integer, Result> callback,

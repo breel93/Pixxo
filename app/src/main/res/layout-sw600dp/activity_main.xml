@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".ui.main.MainActivity">
+  <FrameLayout
+      android:id="@+id/parent_container"
+      android:layout_width="match_parent"
+      android:background="?attr/backgroundcolor"
+      android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.pixxo.breezil.pixxo.utils.helper.NonSwipeableViewPager
+            android:id="@+id/mainViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavViewBar"
+            android:layout_width="@dimen/zeroDP"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/fourDP"
+            android:layout_marginEnd="@dimen/fourDP"
+            android:layout_marginBottom="@dimen/fourDP"
+            android:background="?attr/backgroundcolor"
+            app:elevation="@dimen/fiveDP"
+            app:labelVisibilityMode="labeled"
+            app:itemTextColor="@drawable/item_color"
+            app:itemIconTint="@drawable/item_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottomnavigationmenu">
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addButton"
+            android:layout_width="@dimen/fiftySixDP"
+            android:layout_height="@dimen/fiftySixDP"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/fourDP"
+            android:layout_marginEnd="@dimen/fourDP"
+            android:layout_marginBottom="@dimen/fourDP"
+            app:fabCradleRoundedCornerRadius="15dp"
+            android:src="@drawable/ic_add_black_24dp"
+            app:backgroundTint="@color/colorAccent"
+            app:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bottomNavViewBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </FrameLayout>
+</layout>
+

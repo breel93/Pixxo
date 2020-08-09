@@ -19,11 +19,13 @@
       <androidx.appcompat.widget.Toolbar
           android:id="@+id/toolbar"
           android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
+          android:layout_height="50dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent"
-          app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+          android:theme="@style/Toolbar"
+          app:titleTextAppearance="@style/Toolbar.TitleText"
+         />
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -32,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:background="@android:color/white"
+        android:background="?attr/backgroundcolor"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,15 +45,9 @@
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white"
+          android:background="?attr/backgroundcolor"
           android:orientation="vertical">
-
-        <include layout="@layout/category_shimmer_layout" />
-
-        <include layout="@layout/category_shimmer_layout" />
-
-        <include layout="@layout/category_shimmer_layout" />
-
+        <include layout="@layout/shimmer_layout" />
       </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 

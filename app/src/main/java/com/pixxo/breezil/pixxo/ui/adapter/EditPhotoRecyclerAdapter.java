@@ -97,9 +97,13 @@ public class EditPhotoRecyclerAdapter
             photoLongClickListener.doSomething(editedPhoto);
             return true;
           });
-      double width = editedPhoto.getImage().getWidth();
-      double height = editedPhoto.getImage().getHeight() / .75;
-      binding.photoItem.setAspectRatio(height / width);
+      double ratio = 0;
+      if(editedPhoto.getImage() != null) {
+        double width = editedPhoto.getImage().getWidth();
+        double height = editedPhoto.getImage().getHeight() / .75;
+        ratio = height / width;
+      }
+      binding.photoItem.setAspectRatio(ratio);
       if (editedPhoto.getImage() != null) {
         binding.photoItem.setImageBitmap(editedPhoto.getImage());
       } else {

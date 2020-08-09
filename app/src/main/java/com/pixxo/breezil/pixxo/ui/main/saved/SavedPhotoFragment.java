@@ -91,10 +91,7 @@ public class SavedPhotoFragment extends DaggerFragment {
 
     savedPhotoRecyclerAdapter =
         new SavedPhotoRecyclerAdapter(requireActivity(), photoLongClickListener, photoClickListener);
-    StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
-        StaggeredGridLayoutManager.VERTICAL);
     binding.savedList.setHasFixedSize(true);
-    binding.savedList.setLayoutManager(layoutManager);
     binding.savedList.setAdapter(savedPhotoRecyclerAdapter);
   }
 

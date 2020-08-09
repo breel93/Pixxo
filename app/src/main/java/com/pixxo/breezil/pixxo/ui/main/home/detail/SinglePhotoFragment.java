@@ -55,6 +55,7 @@ import com.pixxo.breezil.pixxo.databinding.FragmentSinglePhotoBinding;
 import com.pixxo.breezil.pixxo.model.Photo;
 import com.pixxo.breezil.pixxo.ui.ImageSaveUtils;
 import com.pixxo.breezil.pixxo.ui.bottom_sheet.ActionBottomSheetFragment;
+import com.pixxo.breezil.pixxo.ui.callbacks.SinglePhotoFragmentOpenedListener;
 import com.pixxo.photoeditor.EditImageActivity;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -64,7 +65,7 @@ import javax.inject.Inject;
 /** A simple {@link Fragment} subclass. */
 public class SinglePhotoFragment extends DaggerFragment {
 
-  SinglePhotoFragmentListener openedlistener;
+  SinglePhotoFragmentOpenedListener openedListener;
   private FragmentSinglePhotoBinding binding;
 
   @Inject ViewModelProvider.Factory viewModelFactory;
@@ -72,9 +73,7 @@ public class SinglePhotoFragment extends DaggerFragment {
   private ImageSaveUtils imageSaveUtils;
   private ProgressDialog mProgress;
 
-  public interface SinglePhotoFragmentListener {
-    void isOpened(Boolean opened);
-  }
+
   public SinglePhotoFragment() {
     // Required empty public constructor
   }
@@ -99,7 +98,7 @@ public class SinglePhotoFragment extends DaggerFragment {
     } else if (getType().equals(SAVED_TYPE)) {
       binding.saveIcon.setVisibility(View.GONE);
     }
-    openedlistener.isOpened(true);
+    openedListener.isOpened(true);
     binding.closeSingleImage.setOnClickListener(v -> requireActivity()
         .getSupportFragmentManager().popBackStack());
     return binding.getRoot();
@@ -123,7 +122,7 @@ public class SinglePhotoFragment extends DaggerFragment {
   public void onAttach(Context context) {
     super.onAttach(context);
     try {
-      openedlistener = (SinglePhotoFragmentListener) requireActivity();
+      openedListener = (SinglePhotoFragmentOpenedListener) requireActivity();
     }catch (ClassCastException e){
       throw new ClassCastException(context.toString()
           + " must implement SinglePhotoFragmentListener ");
@@ -272,15 +271,15 @@ public class SinglePhotoFragment extends DaggerFragment {
 
 
   private Photo getPhoto() {
-    if (getArguments().getParcelable(SINGLE_PHOTO) != null) {
-      return getArguments().getParcelable(SINGLE_PHOTO);
+    if (requireArguments().getParcelable(SINGLE_PHOTO) != null) {
+      return requireArguments().getParcelable(SINGLE_PHOTO);
     } else {
       return null;
     }
   }
   private String getType() {
-    if (getArguments().getString(TYPE) != null) {
-      return getArguments().getString(TYPE);
+    if (requireArguments().getString(TYPE) != null) {
+      return requireArguments().getString(TYPE);
     } else {
       return null;
     }
@@ -316,6 +315,6 @@ public class SinglePhotoFragment extends DaggerFragment {
   @Override
   public void onDetach() {
     super.onDetach();
-    openedlistener.isOpened(false);
+    openedListener.isOpened(false);
   }
 }

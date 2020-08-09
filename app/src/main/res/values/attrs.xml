@@ -3,11 +3,6 @@
     <attr name="backgroundcolor" format="color" />
     <attr name="cardbackground" format="color" />
     <attr name="textcolor" format="color" />
-    <attr name="tintcolor" format="color" />
-    <attr name="buttoncolor" format="color" />
-    <attr name="tinttextcolor" format="color" />
-    <attr name="actionbarcolor" format="color" />
-    <attr name="itemcolor" format="color" />
-    <attr name="articledescriptionText" format="color" />
-    <attr name="iconcolor" format="color" />
+    <attr name="primarytextcolor" format="color" />
+    <attr name="secondarytextcolor" format="color" />
 </resources>

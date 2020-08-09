@@ -60,8 +60,4 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     super.destroyItem(container, position, object);
   }
 
-  private Fragment getFragment(int position) {
-    WeakReference<Fragment> wr = instantiatedFragments.get(position);
-    return wr.get();
-  }
 }

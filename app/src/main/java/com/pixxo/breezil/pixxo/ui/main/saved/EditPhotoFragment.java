@@ -105,9 +105,6 @@ public class EditPhotoFragment extends DaggerFragment {
           fragment.show(requireActivity().getSupportFragmentManager(), getString(R.string.do_something));
         };
     adapter = new EditPhotoRecyclerAdapter(photoClickListener, photoLongClickListener);
-    StaggeredGridLayoutManager staggeredGridLayoutManager =
-        new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-    binding.editedPhotoRecyclerView.setLayoutManager(staggeredGridLayoutManager);
   }
 
   private void updateViewModel() {

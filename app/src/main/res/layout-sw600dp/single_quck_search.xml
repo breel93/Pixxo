@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/fourDP"
+        android:layout_margin="@dimen/twoDP"
+        android:elevation="@dimen/threeDP"
+        android:padding="@dimen/twoDP">
+        <TextView
+            android:id="@+id/searchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="something"
+            android:textSize="@dimen/twentyFourSP"
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/threeDP"/>
+
+    </androidx.cardview.widget.CardView>
+</layout>

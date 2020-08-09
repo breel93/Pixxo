@@ -26,8 +26,9 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+
 import com.pixxo.breezil.pixxo.R;
-import java.util.Objects;
+
 import timber.log.Timber;
 
 public class PreferenceFragment extends PreferenceFragmentCompat
@@ -38,10 +39,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat
     setPreferencesFromResource(R.xml.preference, rootKey);
 
     PreferenceManager.setDefaultValues(
-        Objects.requireNonNull(getActivity()), R.xml.preference, false);
+        requireActivity(), R.xml.preference, false);
 
     initSummary(getPreferenceScreen());
   }
+
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -56,10 +58,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat
     if (!key.equals(getString(R.string.pref_category_key))) {
       updateSummary(findPreference(key));
       updateNightMode(findPreference(key));
-      if(requireActivity() != null){
-        requireActivity().recreate();
-      }
-
+      requireActivity().recreate();
     }
   }
 
@@ -112,4 +111,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat
     getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     super.onStop();
   }
+
+
 }

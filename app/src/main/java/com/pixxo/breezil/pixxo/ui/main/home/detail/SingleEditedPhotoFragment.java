@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSingleEditedPhotoBinding;
 import com.pixxo.breezil.pixxo.model.EditedPhoto;
+import com.pixxo.breezil.pixxo.ui.callbacks.SinglePhotoFragmentOpenedListener;
 
 import java.io.ByteArrayOutputStream;
 
@@ -38,7 +39,7 @@ import dagger.android.support.DaggerFragment;
 public class SingleEditedPhotoFragment extends DaggerFragment {
 
   private FragmentSingleEditedPhotoBinding binding;
-  SingleEditedPhotoFragmentListener openedlistener;
+  SinglePhotoFragmentOpenedListener openedListener;
 
   public interface SingleEditedPhotoFragmentListener {
     void isOpened(Boolean opened);
@@ -62,7 +63,7 @@ public class SingleEditedPhotoFragment extends DaggerFragment {
     binding =
         DataBindingUtil.inflate(inflater, R.layout.fragment_single_edited_photo, container, false);
     binding.closeSingleImage.setOnClickListener(v -> requireActivity().onBackPressed());
-    openedlistener.isOpened(true);
+    openedListener.isOpened(true);
     updateUi(getPhoto());
     return binding.getRoot();
   }
@@ -70,7 +71,7 @@ public class SingleEditedPhotoFragment extends DaggerFragment {
   public void onAttach(Context context) {
     super.onAttach(context);
     try {
-      openedlistener = (SingleEditedPhotoFragment.SingleEditedPhotoFragmentListener) requireActivity();
+      openedListener = (SinglePhotoFragmentOpenedListener) requireActivity();
     }catch (ClassCastException e){
       throw new ClassCastException(context.toString()
           + " must implement SinglePhotoFragmentListener ");
@@ -117,6 +118,6 @@ public class SingleEditedPhotoFragment extends DaggerFragment {
   @Override
   public void onDetach() {
     super.onDetach();
-    openedlistener.isOpened(false);
+    openedListener.isOpened(false);
   }
 }

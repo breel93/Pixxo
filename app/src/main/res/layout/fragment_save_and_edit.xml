@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
   <androidx.constraintlayout.widget.ConstraintLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
       android:id="@+id/someFrag"
@@ -17,7 +16,7 @@
         android:layout_marginStart="@dimen/zeroDP"
         android:layout_marginTop="@dimen/zeroDP"
         android:layout_marginEnd="@dimen/zeroDP"
-        android:background="@drawable/greyborderbottom"
+        android:background="?attr/backgroundcolor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,7 +45,6 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="6"
             app:tabIndicatorFullWidth="false"
-            android:background="?attr/actionbarcolor"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:tabGravity="fill"
             app:tabMode="fixed" />

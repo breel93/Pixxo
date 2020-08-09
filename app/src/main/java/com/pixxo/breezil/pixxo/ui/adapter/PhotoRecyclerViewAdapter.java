@@ -163,6 +163,7 @@ public class PhotoRecyclerViewAdapter extends PagedListAdapter<Photo, RecyclerVi
       binding.photoItem.setAspectRatio((height / width));
       Glide.with(context)
           .load(photo.getWebformatURL())
+          .thumbnail(0.1f)
           //          .centerCrop()
           //          .fitCenter()
           .apply(

@@ -97,7 +97,6 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
                   R.anim.fragment_pop_slide_in,
                   R.anim.fragment_pop_slide_out)
               .replace(R.id.parent_container, fragment)
-//              .hide(this)
               .addToBackStack("fragment")
               .commit();
         };
@@ -164,8 +163,8 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
   }
 
   private String getCategory() {
-    if (getArguments().getString(CATEGORY) != null) {
-      return getArguments().getString(CATEGORY);
+    if (requireArguments().getString(CATEGORY) != null) {
+      return requireArguments().getString(CATEGORY);
     } else {
       return null;
     }
@@ -185,7 +184,7 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
     if (connectionUtils.sniff()) {
       refresh();
     } else {
-      Toast.makeText(getContext(), getString(R.string.no_active_internet), Toast.LENGTH_LONG)
+      Toast.makeText(requireContext(), getString(R.string.no_active_internet), Toast.LENGTH_LONG)
           .show();
     }
   }

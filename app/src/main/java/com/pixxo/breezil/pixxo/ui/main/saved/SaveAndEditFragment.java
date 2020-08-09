@@ -59,7 +59,7 @@ public class SaveAndEditFragment extends DaggerFragment {
 
   private void setupAdapter() {
     SavedPagerAdapter pagerAdapter =
-        new SavedPagerAdapter(getParentFragmentManager(), getContext());
+        new SavedPagerAdapter(requireActivity().getSupportFragmentManager(), getContext());
     binding.container.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.container);
     binding.container.setCurrentItem(0, false);
@@ -67,19 +67,19 @@ public class SaveAndEditFragment extends DaggerFragment {
 
   }
 
-  @Override
-  public void onDetach() {
-    super.onDetach();
-    try {
-      Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-      childFragmentManager.setAccessible(true);
-      childFragmentManager.set(this, null);
-    } catch (NoSuchFieldException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
-  }
+//  @Override
+//  public void onDetach() {
+//    super.onDetach();
+//    try {
+//      Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+//      childFragmentManager.setAccessible(true);
+//      childFragmentManager.set(this, null);
+//    } catch (NoSuchFieldException e) {
+//      throw new RuntimeException(e);
+//    } catch (IllegalAccessException e) {
+//      throw new RuntimeException(e);
+//    }
+//  }
 
   private void gotoOptionSelect() {
     binding.gotoPreference.setOnClickListener(

@@ -6,11 +6,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/categoryShimmerCardLayout"
+            android:id="@+id/shimmerCardLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="?attr/backgroundcolor"
             android:layout_margin="1dp">
+
+            <TextView
+                android:id="@+id/shimmerTitleLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Title"
+                android:textAllCaps="true"
+                android:textColor="@color/colorShimmer"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/shimmerLinearLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <LinearLayout
                 android:id="@+id/shimmerLinearLayout"
                 android:layout_width="match_parent"
@@ -20,7 +37,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/shimmerTitleLayout">
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -34,7 +51,6 @@
                     android:layout_weight="1"
                     android:layout_margin="1dp"/>
             </LinearLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

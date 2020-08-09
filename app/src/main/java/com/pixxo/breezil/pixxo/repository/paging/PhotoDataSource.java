@@ -114,8 +114,10 @@ public class PhotoDataSource extends PageKeyedDataSource<Integer, Photo>
   }
 
   @Override
-  public void loadBefore(
-      @NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Photo> callback) {}
+  public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Photo> callback) {
+
+  }
+
 
   @Override
   public void loadAfter(
@@ -145,7 +147,6 @@ public class PhotoDataSource extends PageKeyedDataSource<Integer, Photo>
     if (photosResult.getHits().size() > ZERO) {
       photos.addAll(photosResult.getHits());
       callback.onResult(photos, null, TWO);
-
       mInitialLoading.postValue(NetworkState.LOADED);
       mNetworkState.postValue(NetworkState.LOADED);
 

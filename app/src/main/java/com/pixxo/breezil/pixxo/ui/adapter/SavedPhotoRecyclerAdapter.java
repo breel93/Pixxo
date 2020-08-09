@@ -135,6 +135,7 @@ public class SavedPhotoRecyclerAdapter
       Glide.with(context).clear(binding.photoItem);
       Glide.with(context)
           .load(photo.getWebformatURL())
+          .thumbnail(0.1f)
           .signature(new MediaStoreSignature("IMAGE",System.currentTimeMillis(),0))
           .apply(
               new RequestOptions()

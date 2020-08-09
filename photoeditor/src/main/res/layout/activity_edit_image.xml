@@ -5,7 +5,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@color/dark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".EditImageActivity">
 
@@ -13,7 +13,7 @@
       android:id="@+id/appBarLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@android:color/black"
+      android:background="@color/dark"
       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       app:layout_constraintBottom_toTopOf="@id/photoEditorView"
       app:layout_constraintEnd_toEndOf="parent"

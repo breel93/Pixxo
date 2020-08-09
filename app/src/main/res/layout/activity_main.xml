@@ -6,6 +6,7 @@
   <FrameLayout
       android:id="@+id/parent_container"
       android:layout_width="match_parent"
+      android:background="?attr/backgroundcolor"
       android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainContainer"

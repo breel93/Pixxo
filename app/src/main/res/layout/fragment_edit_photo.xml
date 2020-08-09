@@ -15,6 +15,8 @@
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
             android:layout_margin="@dimen/oneDP"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

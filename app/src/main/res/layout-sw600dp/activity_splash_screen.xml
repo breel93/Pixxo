@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:fitsSystemWindows="true"
+      android:background="?attr/backgroundcolor"
+      tools:context=".ui.splash.SplashScreenActivity">
+
+    <ImageView
+
+        android:id="@+id/base_layer"
+        android:layout_width="@dimen/OneFiftyDP"
+        android:layout_height="@dimen/OneFiftyDP"
+        android:layout_marginStart="@dimen/eightDP"
+        android:layout_marginTop="@dimen/eightDP"
+        android:layout_marginEnd="@dimen/eightDP"
+        android:layout_marginBottom="@dimen/eightDP"
+        android:contentDescription="@string/logo"
+        android:elevation="@dimen/fiveDP"
+        android:src="@drawable/base_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+        android:id="@+id/top_layer"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="@dimen/eightDP"
+        android:layout_marginBottom="@dimen/eightDP"
+        android:contentDescription="@string/logo"
+        android:elevation="@dimen/tenDP"
+        android:src="@drawable/top"
+        app:layout_constraintBottom_toBottomOf="@+id/base_layer"
+        app:layout_constraintEnd_toEndOf="@+id/base_layer"
+        app:layout_constraintStart_toStartOf="@+id/base_layer"
+        app:layout_constraintTop_toTopOf="@+id/base_layer" />
+
+    <ImageView
+        android:id="@+id/blackDot"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="68dp"
+        android:elevation="@dimen/fifteenDP"
+        android:src="@drawable/dot"
+        app:layout_constraintEnd_toEndOf="@+id/top_layer"
+        app:layout_constraintTop_toTopOf="@+id/top_layer" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

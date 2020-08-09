@@ -21,6 +21,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSettingsBinding;
+
+import java.lang.reflect.Field;
+
 import dagger.android.support.DaggerFragment;
 
 /** A simple {@link Fragment} subclass. */
@@ -37,20 +40,18 @@ public class SettingsFragment extends DaggerFragment {
     // Inflate the layout for this fragment
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
     goBack();
-    showPreference();
     return binding.getRoot();
   }
 
-  private void showPreference() {
-    PreferenceFragment fragment = new PreferenceFragment();
-    getChildFragmentManager()
-        .beginTransaction()
-        .add(R.id.prefSettingsFragment, fragment)
-        .addToBackStack("preference")
-        .commit();
+  private void goBack() {
+    binding.backPressed.setOnClickListener(v ->
+        requireActivity().getSupportFragmentManager().popBackStack());
   }
 
-  private void goBack() {
-    binding.backPressed.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
   }
+
+
 }
