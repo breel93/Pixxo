@@ -75,6 +75,33 @@
           app:layout_constraintTop_toBottomOf="@+id/mainRecyclerView"
           app:spanCount="3" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+    <TextView
+        android:id="@+id/searchError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_result_error"
+        android:textColor="?attr/textcolor"
+        android:textSize="22sp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:drawableTop="@drawable/ic_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/responseError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/response_error"
+        android:textColor="?attr/textcolor"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:drawableTop="@drawable/ic_no_wifi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

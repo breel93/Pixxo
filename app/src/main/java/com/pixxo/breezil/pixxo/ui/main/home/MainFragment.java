@@ -30,15 +30,18 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentMainBinding;
+import com.pixxo.breezil.pixxo.repository.NetworkState;
 import com.pixxo.breezil.pixxo.ui.adapter.PhotoRecyclerViewAdapter;
 import com.pixxo.breezil.pixxo.ui.adapter.QuickSelectRecyclerListAdapter;
 import com.pixxo.breezil.pixxo.ui.bottom_sheet.ActionBottomSheetFragment;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoLongClickListener;
 import com.pixxo.breezil.pixxo.ui.callbacks.QuickSelectListener;
+import com.pixxo.breezil.pixxo.ui.callbacks.RetryListener;
 import com.pixxo.breezil.pixxo.ui.main.MainViewModel;
 import com.pixxo.breezil.pixxo.ui.main.home.detail.SinglePhotoFragment;
 import com.pixxo.breezil.pixxo.ui.settings.SettingsFragment;
+import com.pixxo.breezil.pixxo.utils.ConnectionUtils;
 import com.pixxo.breezil.pixxo.view_model.ViewModelFactory;
 import dagger.android.support.DaggerFragment;
 import java.util.Arrays;
@@ -46,9 +49,12 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 /** A simple {@link Fragment} subclass. */
-public class MainFragment extends DaggerFragment {
+public class MainFragment extends DaggerFragment implements RetryListener {
 
   @Inject ViewModelFactory viewModelFactory;
+
+  @Inject
+  ConnectionUtils connectionUtils;
 
   private MainViewModel viewModel;
   private FragmentMainBinding binding;
@@ -111,7 +117,8 @@ public class MainFragment extends DaggerFragment {
     binding.swipeRefresh.setVisibility(View.VISIBLE);
     binding.swipeRefresh.setColorSchemeResources(
         R.color.colorAccent, R.color.colorPrimary, R.color.colorblue, R.color.hotPink);
-
+    viewModel.setNetworkState();
+    setupLoading();
     viewModel.setParameter(
         getString(R.string.blank),
         getString(R.string.blank),
@@ -121,20 +128,8 @@ public class MainFragment extends DaggerFragment {
         .getPhotoList()
         .observe(
             getViewLifecycleOwner(),
-            photos -> {
-                binding.shimmerViewContainer.setVisibility(View.GONE);
-                adapter.submitList(photos);
-            });
+            photos -> adapter.submitList(photos));
 
-    viewModel
-        .getNetworkState()
-        .observe(
-            getViewLifecycleOwner(),
-            networkState -> {
-              if (networkState != null) {
-                adapter.setNetworkState(networkState);
-              }
-            });
     if (binding.swipeRefresh != null) {
       binding.swipeRefresh.setRefreshing(false);
     }
@@ -192,6 +187,8 @@ public class MainFragment extends DaggerFragment {
   }
 
   private void search(String search) {
+    viewModel.setNetworkState();
+    setupLoading();
     viewModel.setParameter(
         search, getString(R.string.blank), getString(R.string.en), getString(R.string.random));
 
@@ -200,23 +197,14 @@ public class MainFragment extends DaggerFragment {
         .observe(
             this,
             photos -> {
-//              if(!photos.isEmpty()){
                 binding.shimmerViewContainer.setVisibility(View.GONE);
                 adapter.submitList(photos);
-//              }
-            });
-    viewModel
-        .getNetworkState()
-        .observe(
-            this,
-            networkState -> {
-              if (networkState != null) {
-                adapter.setNetworkState(networkState);
-              }
             });
   }
 
   private void refresh() {
+    viewModel.setNetworkState();
+    setupLoading();
     viewModel.setParameter(
         getString(R.string.blank),
         getString(R.string.blank),
@@ -224,23 +212,44 @@ public class MainFragment extends DaggerFragment {
         getString(R.string.random));
 
     viewModel.refreshPhotos().observe(this, photos -> {
-//      if(!photos.isEmpty()){
         binding.shimmerViewContainer.setVisibility(View.GONE);
         adapter.submitList(photos);
-//      }
     });
     if (binding.swipeRefresh != null) {
       binding.swipeRefresh.setRefreshing(false);
     }
-    viewModel
-        .getNetworkState()
-        .observe(
-            this,
-            networkState -> {
-              if (networkState != null) {
-                adapter.setNetworkState(networkState);
-              }
-            });
+  }
+
+  private void setupLoading(){
+    viewModel.getInitialLoading().observe(getViewLifecycleOwner(), networkState -> {
+      if(networkState != null){
+        if(networkState.getStatus() == NetworkState.Status.SUCCESS){
+          binding.shimmerViewContainer.setVisibility(View.GONE);
+          binding.searchError.setVisibility(View.GONE);
+          binding.responseError.setVisibility(View.GONE);
+          binding.photoRecyclerView.setVisibility(View.VISIBLE);
+        }else if(networkState.getStatus() == NetworkState.Status.FAILED){
+          binding.shimmerViewContainer.setVisibility(View.GONE);
+          binding.searchError.setVisibility(View.GONE);
+          binding.responseError.setVisibility(View.VISIBLE);
+          binding.photoRecyclerView.setVisibility(View.GONE);
+        }else if(networkState.getStatus() == NetworkState.Status.NO_RESULT){
+          binding.shimmerViewContainer.setVisibility(View.GONE);
+          binding.searchError.setVisibility(View.VISIBLE);
+          binding.responseError.setVisibility(View.GONE);
+          binding.photoRecyclerView.setVisibility(View.GONE);
+        }else{
+          binding.shimmerViewContainer.setVisibility(View.VISIBLE);
+          binding.searchError.setVisibility(View.GONE);
+          binding.responseError.setVisibility(View.GONE);
+        }
+      }
+    });
+    viewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+      if(networkState != null){
+        adapter.setNetworkState(networkState);
+      }
+    });
   }
 
   private void gotoOptionSelect() {
@@ -259,5 +268,14 @@ public class MainFragment extends DaggerFragment {
               .hide(this)
               .commit();
         });
+  }
+
+  @Override
+  public void onRefresh() {
+    if (connectionUtils.sniff()) {
+      refresh();
+    } else {
+      Toast.makeText(getContext(), getString(R.string.no_active_internet), Toast.LENGTH_SHORT).show();
+    }
   }
 }

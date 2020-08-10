@@ -56,11 +56,11 @@ public class PhotoDataSource extends PageKeyedDataSource<Integer, Photo>
     this.endpointRepository = endpointRepository;
   }
 
-  public MutableLiveData getNetworkState() {
+  public MutableLiveData<NetworkState> getNetworkState() {
     return mNetworkState;
   }
 
-  public MutableLiveData getInitialLoading() {
+  public MutableLiveData<NetworkState> getInitialState() {
     return mInitialLoading;
   }
 

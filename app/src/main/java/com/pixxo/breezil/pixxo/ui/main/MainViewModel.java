@@ -31,7 +31,8 @@ import javax.inject.Inject;
 
 public class MainViewModel extends AndroidViewModel {
   private LiveData<PagedList<Photo>> photoList;
-  private LiveData networkState;
+  private LiveData<NetworkState> networkState;
+  private LiveData<NetworkState> initialLoading;
   private AppExecutors appsExecutor;
   private PhotoDataSourceFactory photoDataSourceFactory;
 
@@ -47,6 +48,7 @@ public class MainViewModel extends AndroidViewModel {
     networkState =
         Transformations.switchMap(
             photoDataSourceFactory.getPhotoDataSources(), PhotoDataSource::getNetworkState);
+    initialLoading = Transformations.switchMap(photoDataSourceFactory.getPhotoDataSources(), PhotoDataSource::getInitialState);
 
     PagedList.Config config =
         new PagedList.Config.Builder()
@@ -73,6 +75,12 @@ public class MainViewModel extends AndroidViewModel {
     photoDataSourceFactory.getDataSource().setOrder(order);
   }
 
+  public void setNetworkState(){
+    networkState = Transformations.switchMap(photoDataSourceFactory.getPhotoDataSources(),
+        PhotoDataSource::getNetworkState);
+    initialLoading = Transformations.switchMap(photoDataSourceFactory.getPhotoDataSources(), PhotoDataSource::getInitialState);
+  }
+
   public LiveData<PagedList<Photo>> refreshPhotos() {
     PagedList.Config config =
         new PagedList.Config.Builder().setEnablePlaceholders(true).setPageSize(FIVE).build();
@@ -85,7 +93,12 @@ public class MainViewModel extends AndroidViewModel {
     return photoList;
   }
 
-  public LiveData<NetworkState> getNetworkState() {
+  public LiveData<NetworkState>
+  getNetworkState() {
     return networkState;
   }
+  public LiveData<NetworkState> getInitialLoading() {
+    return initialLoading;
+  }
+
 }

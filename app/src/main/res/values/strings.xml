@@ -210,6 +210,8 @@
   <string name="detail">detail</string>
   <string name="settings">Settings</string>
   <string name="no_active_internet">No Active Internet Connection</string>
+  <string name="response_error">An error occurred. Check your internet connection or try again.</string>
+  <string name="no_result_error">Ops! No result found, try again</string>
 
 
 </resources>

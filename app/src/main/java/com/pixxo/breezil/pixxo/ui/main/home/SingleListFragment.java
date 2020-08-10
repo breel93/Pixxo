@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import com.pixxo.breezil.pixxo.R;
 import com.pixxo.breezil.pixxo.databinding.FragmentSingleListBinding;
+import com.pixxo.breezil.pixxo.repository.NetworkState;
 import com.pixxo.breezil.pixxo.ui.adapter.PhotoRecyclerViewAdapter;
 import com.pixxo.breezil.pixxo.ui.bottom_sheet.ActionBottomSheetFragment;
 import com.pixxo.breezil.pixxo.ui.callbacks.PhotoClickListener;
@@ -79,13 +80,12 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
     setUpViewModel();
     setHasOptionsMenu(true);
     binding.swipeRefresh.setOnRefreshListener(this::refresh);
-    binding.shimmerViewContainer.startShimmer();
     return binding.getRoot();
   }
 
   private void setUpAdapter() {
-
-
+    binding.shimmerViewContainer.startShimmer();
+    binding.shimmerViewContainer.setVisibility(View.VISIBLE);
     PhotoClickListener photoClickListener =
         photo -> {
           SinglePhotoFragment fragment = SinglePhotoFragment.getPhoto(photo, FIRST_TYPE);
@@ -108,34 +108,22 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
         };
     photoRecyclerViewAdapter =
         new PhotoRecyclerViewAdapter(getContext(), photoClickListener, photoLongClickListener);
+    binding.imageList.hasFixedSize();
+    binding.imageList.setAdapter(photoRecyclerViewAdapter);
   }
 
   private void setUpViewModel() {
     binding.swipeRefresh.setVisibility(View.VISIBLE);
     binding.swipeRefresh.setColorSchemeResources(
         R.color.colorAccent, R.color.colorPrimary, R.color.colorblue, R.color.hotPink);
-
+    viewModel.setNetworkState();
+    setupLoading();
     viewModel.setParameter("", getCategory(), getString(R.string.en), "");
     viewModel
         .getPhotoList()
         .observe(
             getViewLifecycleOwner(),
-            photo -> {
-              if (photo != null) {
-                binding.imageList.setAdapter(photoRecyclerViewAdapter);
-                photoRecyclerViewAdapter.submitList(photo);
-                binding.shimmerViewContainer.setVisibility(View.GONE);
-              }
-            });
-    viewModel
-        .getNetworkState()
-        .observe(
-            getViewLifecycleOwner(),
-            networkState -> {
-              if (networkState != null) {
-                photoRecyclerViewAdapter.setNetworkState(networkState);
-              }
-            });
+            photo -> photoRecyclerViewAdapter.submitList(photo));
 
     if (binding.swipeRefresh != null) {
       binding.swipeRefresh.setRefreshing(false);
@@ -143,23 +131,15 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
   }
 
   private void refresh() {
+    viewModel.setNetworkState();
+    setupLoading();
     viewModel.setParameter("", getCategory(), getString(R.string.en), "");
-
     viewModel
         .refreshPhotos()
         .observe(getViewLifecycleOwner(), photo -> photoRecyclerViewAdapter.submitList(photo));
     if (binding.swipeRefresh != null) {
       binding.swipeRefresh.setRefreshing(false);
     }
-    viewModel
-        .getNetworkState()
-        .observe(
-            getViewLifecycleOwner(),
-            networkState -> {
-              if (networkState != null) {
-                photoRecyclerViewAdapter.setNetworkState(networkState);
-              }
-            });
   }
 
   private String getCategory() {
@@ -168,6 +148,35 @@ public class SingleListFragment extends DaggerFragment implements RetryListener 
     } else {
       return null;
     }
+  }
+
+  private void setupLoading(){
+    viewModel.getInitialLoading().observe(getViewLifecycleOwner(), networkState -> {
+      if(networkState != null){
+        if(networkState.getStatus() == NetworkState.Status.SUCCESS){
+          binding.shimmerViewContainer.setVisibility(View.GONE);
+          binding.searchError.setVisibility(View.GONE);
+          binding.responseError.setVisibility(View.GONE);
+        }else if(networkState.getStatus() == NetworkState.Status.FAILED){
+          binding.shimmerViewContainer.setVisibility(View.GONE);
+          binding.searchError.setVisibility(View.GONE);
+          binding.responseError.setVisibility(View.VISIBLE);
+        }else if(networkState.getStatus() == NetworkState.Status.NO_RESULT){
+          binding.shimmerViewContainer.setVisibility(View.GONE);
+          binding.searchError.setVisibility(View.VISIBLE);
+          binding.responseError.setVisibility(View.GONE);
+        }else{
+          binding.shimmerViewContainer.setVisibility(View.VISIBLE);
+          binding.searchError.setVisibility(View.GONE);
+          binding.responseError.setVisibility(View.GONE);
+        }
+      }
+    });
+    viewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+      if(networkState != null){
+        photoRecyclerViewAdapter.setNetworkState(networkState);
+      }
+    });
   }
 
   @Override
