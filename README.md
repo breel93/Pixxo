@@ -9,12 +9,10 @@
   </a>
 
   <h4 align="center">Pixxo</h4>
-  
   <p align="center">
-    Pixxo is an application that let you explore pictures, edit,write over them and share.  
-    <br />
-    <br />
-    <br />
+   <img src="https://user-images.githubusercontent.com/20865566/90820354-2ad52f00-e329-11ea-9c79-a123f33f67eb.png" alt="Banner">
+  </p>
+  <p align="center">
     <a href="https://github.com/breel93/Pixxo/issues">Report Bug</a>
     ·
     <a href="https://github.com/breel93/Pixxo/issues">Request Feature</a>
@@ -38,7 +36,6 @@
 * [Contributing](#contributing)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
-* [License](#license)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
