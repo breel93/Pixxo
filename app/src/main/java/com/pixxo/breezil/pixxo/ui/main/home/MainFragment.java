@@ -243,13 +243,14 @@ public class MainFragment extends DaggerFragment implements RetryListener {
           binding.searchError.setVisibility(View.GONE);
           binding.responseError.setVisibility(View.GONE);
         }
-      }
-    });
-    viewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
-      if(networkState != null){
         adapter.setNetworkState(networkState);
       }
     });
+//    viewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+//      if(networkState != null){
+//        adapter.setNetworkState(networkState);
+//      }
+//    });
   }
 
   private void gotoOptionSelect() {

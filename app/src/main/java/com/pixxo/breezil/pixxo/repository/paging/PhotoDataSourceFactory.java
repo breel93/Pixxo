@@ -31,7 +31,6 @@ public class PhotoDataSourceFactory extends DataSource.Factory<Integer, Photo> {
   @Override
   public DataSource<Integer, Photo> create() {
     photoDataSourceMutableLiveData.postValue(dataSource);
-
     return dataSource;
   }
 
