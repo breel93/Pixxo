@@ -7,8 +7,6 @@
   <a href="https://github.com/breel93/pixxo">
     <img src="https://user-images.githubusercontent.com/20865566/90813791-fb6df480-e31f-11ea-92cd-9d80c5dd160d.png" alt="Logo">
   </a>
-
-  <h4 align="center">Pixxo</h4>
   <p align="center">
    <img src="https://user-images.githubusercontent.com/20865566/90820354-2ad52f00-e329-11ea-9c79-a123f33f67eb.png" alt="Banner">
   </p>
